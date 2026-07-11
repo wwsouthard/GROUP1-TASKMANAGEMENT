@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+// Sprint 1: Create Task route module (POST /api/tasks)
+const taskRoutes = require('./routes/task');
 
 const app = express();
 
@@ -12,5 +14,8 @@ app.get('/api/health', (req, res) => {
     message: 'Task Management System API is running'
   });
 });
+
+// Sprint 1: mount create-task (and future task) endpoints under /api/tasks
+app.use('/api/tasks', taskRoutes);
 
 module.exports = app;

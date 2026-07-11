@@ -1,0 +1,118 @@
+<!-- Sprint 1 — Create Task form -->
+<section class="task-create" aria-labelledby="create-task-heading">
+  <h1 id="create-task-heading">Create Task</h1>
+  <p class="task-create__intro">
+    Add a new task with a unique title, status, priority, and project.
+  </p>
+
+  <!-- Success feedback after a successful API create -->
+  @if (successMessage) {
+    <p class="task-create__alert task-create__alert--success" role="status">
+      {{ successMessage }}
+    </p>
+  }
+
+  <!-- Error feedback for validation/API failures (e.g. duplicate title) -->
+  @if (errorMessage) {
+    <p class="task-create__alert task-create__alert--error" role="alert">
+      {{ errorMessage }}
+    </p>
+  }
+
+  <form class="task-create__form" [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="task-create__field">
+      <label for="title">Title</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        autocomplete="off"
+        [attr.aria-invalid]="title.invalid && title.touched"
+        [attr.aria-describedby]="title.invalid && title.touched ? 'title-error' : null"
+      />
+      @if (title.invalid && title.touched) {
+        <p id="title-error" class="task-create__error">Title is required.</p>
+      }
+    </div>
+
+    <div class="task-create__field">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <div class="task-create__row">
+      <div class="task-create__field">
+        <label for="status">Status</label>
+        <select
+          id="status"
+          formControlName="status"
+          [attr.aria-invalid]="status.invalid && status.touched"
+          [attr.aria-describedby]="status.invalid && status.touched ? 'status-error' : null"
+        >
+          <option value="" disabled>Select status</option>
+          @for (option of statuses; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+        @if (status.invalid && status.touched) {
+          <p id="status-error" class="task-create__error">Status is required.</p>
+        }
+      </div>
+
+      <div class="task-create__field">
+        <label for="priority">Priority</label>
+        <select
+          id="priority"
+          formControlName="priority"
+          [attr.aria-invalid]="priority.invalid && priority.touched"
+          [attr.aria-describedby]="priority.invalid && priority.touched ? 'priority-error' : null"
+        >
+          <option value="" disabled>Select priority</option>
+          @for (option of priorities; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+        @if (priority.invalid && priority.touched) {
+          <p id="priority-error" class="task-create__error">Priority is required.</p>
+        }
+      </div>
+    </div>
+
+    <div class="task-create__row">
+      <div class="task-create__field">
+        <label for="dueDate">Due date</label>
+        <input id="dueDate" type="date" formControlName="dueDate" />
+      </div>
+
+      <!-- projectId is required by the Create Task API / Atlas schema -->
+      <div class="task-create__field">
+        <label for="projectId">Project ID</label>
+        <input
+          id="projectId"
+          type="number"
+          formControlName="projectId"
+          min="1"
+          step="1"
+          [attr.aria-invalid]="projectId.invalid && projectId.touched"
+          [attr.aria-describedby]="projectId.invalid && projectId.touched ? 'projectId-error' : null"
+        />
+        @if (projectId.invalid && projectId.touched) {
+          <p id="projectId-error" class="task-create__error">Project ID is required.</p>
+        }
+      </div>
+    </div>
+
+    <div class="task-create__actions">
+      <button
+        type="submit"
+        [disabled]="taskForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'Creating…' : 'Create Task' }}
+      </button>
+    </div>
+  </form>
+</section>
