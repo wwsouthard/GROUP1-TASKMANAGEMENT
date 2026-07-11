@@ -7,6 +7,9 @@ const taskController = require('../controllers/task');
 
 const router = express.Router();
 
+// List All Tasks API — GET /api/tasks
+router.get('/', taskController.getTasks);
+
 // Create Task API — POST /api/tasks
 router.post('/', taskController.createTask);
 

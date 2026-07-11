@@ -34,6 +34,12 @@ export interface CreateTaskRequest {
   taskId?: number | null;
 }
 
+/** Standard success response from the List All Tasks API */
+export interface GetTasksResponse {
+  message: string;
+  tasks: Task[];
+}
+
 /** Standard success response from the Create Task API */
 export interface CreateTaskResponse {
   message: string;

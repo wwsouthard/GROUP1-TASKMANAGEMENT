@@ -6,6 +6,28 @@
 const taskService = require('../services/task');
 
 /**
+ * GET /api/tasks
+ * Success: 200 { message, tasks }
+ * Server errors: 500 { message }
+ */
+async function getTasks(req, res) {
+  try {
+    const tasks = await taskService.listTasks();
+
+    return res.status(200).json({
+      message: 'Tasks retrieved successfully',
+      tasks
+    });
+  } catch (error) {
+    console.error('Error retrieving tasks:', error.message);
+
+    return res.status(500).json({
+      message: 'Unable to retrieve tasks'
+    });
+  }
+}
+
+/**
  * POST /api/tasks
  * Success: 201 { message, task }
  * Client errors: 400 / 409 { message }
@@ -39,5 +61,6 @@ async function createTask(req, res) {
 }
 
 module.exports = {
-  createTask
+  createTask,
+  getTasks
 };

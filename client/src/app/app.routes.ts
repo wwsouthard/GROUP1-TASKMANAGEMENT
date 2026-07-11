@@ -1,12 +1,15 @@
 /**
  * Sprint 1 — Application routes.
- * Create Task is available at /tasks/create; default path redirects there.
+ * Create Task is available at /tasks/create.
+ * List All Tasks is available at /tasks.
  */
 import { Routes } from '@angular/router';
 import { TaskCreateComponent } from './task-create/task-create.component';
+import { TaskListComponent } from './task-list/task-list.component';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'tasks/create' },
+  { path: '', pathMatch: 'full', redirectTo: 'tasks' },
+  { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/create', component: TaskCreateComponent },
-  { path: '**', redirectTo: 'tasks/create' }
+  { path: '**', redirectTo: 'tasks' }
 ];

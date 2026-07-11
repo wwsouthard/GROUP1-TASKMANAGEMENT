@@ -63,6 +63,14 @@ function validateCreateTaskInput(payload = {}) {
 }
 
 /**
+ * List all task documents.
+ * Sorts newest modified tasks first so the list is consistent for the UI.
+ */
+async function listTasks() {
+  return Task.find({}).sort({ dateModified: -1 });
+}
+
+/**
  * Create a new task document.
  * Sets dateCreated/dateModified, checks title uniqueness, then saves.
  */
@@ -133,5 +141,6 @@ async function createTask(payload) {
 
 module.exports = {
   createTask,
+  listTasks,
   validateCreateTaskInput
 };

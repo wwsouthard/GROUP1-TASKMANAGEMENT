@@ -1,0 +1,42 @@
+<section class="task-list">
+  <header class="task-list__header">
+    <div>
+      <h1>Tasks</h1>
+      <p>View all tasks in the Task Management System.</p>
+    </div>
+
+    <a class="task-list__button" href="/tasks/create">Create Task</a>
+  </header>
+
+  <p *ngIf="isLoading" class="task-list__message">Loading tasks...</p>
+
+  <p *ngIf="errorMessage" class="task-list__message task-list__message--error">
+    {{ errorMessage }}
+  </p>
+
+  <p *ngIf="!isLoading && !errorMessage && tasks.length === 0" class="task-list__message">
+    No tasks found.
+  </p>
+
+  <table *ngIf="!isLoading && !errorMessage && tasks.length > 0" class="task-list__table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Project ID</th>
+        <th>Due Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.title }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.projectId }}</td>
+        <td>{{ task.dueDate || 'No due date' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
