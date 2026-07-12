@@ -38,6 +38,7 @@ describe('TaskListComponent', () => {
       tasks: [
         {
           _id: 'task-1',
+          taskId: 23,
           title: 'Design login screen',
           status: 'Pending',
           priority: 'High',

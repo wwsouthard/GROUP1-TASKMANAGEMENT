@@ -31,7 +31,15 @@ async function getTasks(req, res) {
 async function getTaskById(req, res) {
   try {
     const taskId = Number(req.params.taskId);
+
+    if(Number.isNaN(taskId)) {
+      return res.status(400).json({
+        message: 'Invalid task ID'
+      });
+    }
+
     const task = await taskService.getTask(taskId);
+    
     return res.status(200).json({
       message: 'Task retrieved successfully', task
     });
