@@ -10,6 +10,9 @@ const router = express.Router();
 // List All Tasks API — GET /api/tasks
 router.get('/', taskController.getTasks);
 
+// Read Task By taskId — GET /api/tasks/:taskId
+router.get('/:taskId', taskController.getTaskById);
+
 // Create Task API — POST /api/tasks
 router.post('/', taskController.createTask);
 

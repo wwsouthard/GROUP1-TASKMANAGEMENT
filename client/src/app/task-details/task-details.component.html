@@ -1,0 +1,14 @@
+<section class="task-details">
+  <p *ngIf="isLoading">Loading Task</p>
+
+  <p *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div *ngIf="task">
+    <h2>{{ task.title }}</h2>
+    <p>{{ task.description }}</p>
+    <p><b>Task Status:</b> {{ task.status }}</p>
+    <p><b>Task Priority:</b> {{ task.priority }}</p>
+    <p><b>Due Date:</b> {{ task.dueDate | date:'longDate' }}</p>
+    <p><b>Task ID:</b> {{ task.taskId }}</p>
+  </div>
+</section>

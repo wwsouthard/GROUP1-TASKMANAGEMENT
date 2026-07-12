@@ -62,6 +62,11 @@ function validateCreateTaskInput(payload = {}) {
   }
 }
 
+/** * Retreive a specific task by it's taskId */
+async function getTask(taskId) {
+  return await Task.findOne({ taskId });
+}
+
 /**
  * List all task documents.
  * Sorts newest modified tasks first so the list is consistent for the UI.
@@ -141,6 +146,7 @@ async function createTask(payload) {
 
 module.exports = {
   createTask,
+  getTask,
   listTasks,
   validateCreateTaskInput
 };

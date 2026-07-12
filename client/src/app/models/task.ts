@@ -40,6 +40,12 @@ export interface GetTasksResponse {
   tasks: Task[];
 }
 
+/** Standard success response from the Get Task By Id API */
+export interface GetTaskByIdResponse {
+  message: string;
+  task: Task;
+}
+
 /** Standard success response from the Create Task API */
 export interface CreateTaskResponse {
   message: string;

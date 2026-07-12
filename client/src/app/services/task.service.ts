@@ -6,7 +6,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CreateTaskRequest, CreateTaskResponse, GetTasksResponse } from '../models/task';
+import { CreateTaskRequest, CreateTaskResponse, GetTasksResponse, GetTaskByIdResponse } from '../models/task';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,11 @@ export class TaskService {
    */
   getTasks(): Observable<GetTasksResponse> {
     return this.http.get<GetTasksResponse>(`${this.apiBaseUrl}/api/tasks`);
+  }
+
+  /** * Get a task by it's taskId via GET /api/tasks/:taskId */
+  getTaskById(taskId: number): Observable<GetTaskByIdResponse> {
+    return this.http.get<GetTaskByIdResponse>(`${this.apiBaseUrl}/api/tasks/${taskId}`);
   }
 
   /**
