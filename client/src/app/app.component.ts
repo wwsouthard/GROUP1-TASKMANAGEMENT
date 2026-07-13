@@ -1,6 +1,6 @@
 /**
  * Root application shell.
- * Provides light navigation into the Sprint 1 Create Task feature.
+ * Provides primary navigation across Sprint 1 task features.
  */
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';

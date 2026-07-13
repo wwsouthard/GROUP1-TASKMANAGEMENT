@@ -44,3 +44,17 @@
 .task-list__table th {
   font-weight: 700;
 }
+
+.task-list__link {
+  color: #1c1917;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.task-list__link:hover {
+  text-decoration: underline;
+}
+
+.task-list__muted {
+  color: #78716c;
+}

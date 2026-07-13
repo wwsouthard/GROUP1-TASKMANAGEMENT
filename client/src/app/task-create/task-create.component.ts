@@ -2,14 +2,15 @@
  * Sprint 1 — Create Task component.
  * Reactive form that submits a new task through TaskService.createTask.
  */
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import {
   CreateTaskRequest,
@@ -29,6 +30,7 @@ import {
 export class TaskCreateComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly taskService = inject(TaskService);
+  private readonly router = inject(Router);
 
   /** Dropdown options matching backend enums */
   readonly statuses = TASK_STATUSES;
@@ -91,15 +93,8 @@ export class TaskCreateComponent {
       next: (response) => {
         this.isSubmitting = false;
         this.successMessage = response.message || 'Task created successfully';
-        // Remain on the page and reset for another entry (no existing nav pattern)
-        this.taskForm.reset({
-          title: '',
-          description: '',
-          status: '',
-          priority: '',
-          dueDate: '',
-          projectId: null
-        });
+        this.errorMessage = null;
+        void this.router.navigate(['/tasks']);
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;

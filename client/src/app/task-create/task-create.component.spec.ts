@@ -3,6 +3,7 @@
  * TaskService is mocked; no real HTTP requests are made.
  */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { TaskCreateComponent } from './task-create.component';
 import { TaskService } from '../services/task.service';
@@ -12,17 +13,22 @@ describe('TaskCreateComponent', () => {
   let component: TaskCreateComponent;
   let fixture: ComponentFixture<TaskCreateComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let router: Router;
 
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['createTask']);
 
     await TestBed.configureTestingModule({
       imports: [TaskCreateComponent],
-      providers: [{ provide: TaskService, useValue: taskServiceSpy }]
+      providers: [
+        provideRouter([]),
+        { provide: TaskService, useValue: taskServiceSpy }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TaskCreateComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
@@ -63,6 +69,7 @@ describe('TaskCreateComponent', () => {
     };
 
     taskServiceSpy.createTask.and.returnValue(of(apiResponse));
+    const navigateSpy = spyOn(router, 'navigate').and.resolveTo(true);
 
     component.taskForm.setValue({
       title: 'Write sprint documentation',
@@ -87,5 +94,6 @@ describe('TaskCreateComponent', () => {
     expect(component.successMessage).toBe('Task created successfully');
     expect(component.errorMessage).toBeNull();
     expect(component.isSubmitting).toBeFalse();
+    expect(navigateSpy).toHaveBeenCalledWith(['/tasks']);
   });
 });

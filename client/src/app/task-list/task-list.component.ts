@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })

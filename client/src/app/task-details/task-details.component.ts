@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Component, OnInit, inject } from '@angular/core';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
@@ -7,7 +7,7 @@ import { TaskService } from '../services/task.service';
 @Component({
   selector: 'app-task-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.css'
 })

@@ -26,6 +26,12 @@
   font-weight: 700;
 }
 
+.app-shell__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
 .app-shell__nav a {
   color: #44403c;
   text-decoration: none;

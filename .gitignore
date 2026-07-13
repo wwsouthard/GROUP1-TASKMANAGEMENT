@@ -4,8 +4,8 @@ client/node_modules/
 server/node_modules/
 
 # Environment variables
-.env
-server/.env
+# Note: server/.env is tracked temporarily so the course instructor can run the app.
+# Prefer rotating Atlas credentials after the course if this repo is public.
 client/.env
 
 # Build outputs

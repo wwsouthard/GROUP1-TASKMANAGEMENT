@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { TaskService } from '../services/task.service';
 import { TaskListComponent } from './task-list.component';
@@ -14,6 +15,7 @@ describe('TaskListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TaskListComponent],
       providers: [
+        provideRouter([]),
         { provide: TaskService, useValue: taskServiceMock }
       ]
     }).compileComponents();

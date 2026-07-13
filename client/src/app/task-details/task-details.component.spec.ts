@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { TaskDetailsComponent } from './task-details.component';
@@ -41,6 +41,7 @@ describe('TaskDetailsComponent', () => {
         TaskDetailsComponent
       ],
       providers: [
+        provideRouter([]),
         {
           provide: TaskService,
           useValue: taskServiceMock

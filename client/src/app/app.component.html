@@ -1,8 +1,9 @@
 <!-- Root shell: brand + nav + routed feature pages -->
 <div class="app-shell">
   <header class="app-shell__header">
-    <a class="app-shell__brand" routerLink="/tasks/create">{{ title }}</a>
+    <a class="app-shell__brand" routerLink="/tasks">{{ title }}</a>
     <nav class="app-shell__nav" aria-label="Primary">
+      <a routerLink="/tasks" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">Tasks</a>
       <a routerLink="/tasks/create" routerLinkActive="is-active">Create Task</a>
     </nav>
   </header>

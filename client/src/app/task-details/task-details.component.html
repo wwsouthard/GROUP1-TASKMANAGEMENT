@@ -1,4 +1,8 @@
 <section class="task-details">
+  <p class="task-details__nav">
+    <a routerLink="/tasks">← Back to tasks</a>
+  </p>
+
   <p *ngIf="isLoading">Loading Task</p>
 
   <p *ngIf="errorMessage">{{ errorMessage }}</p>
