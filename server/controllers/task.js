@@ -27,7 +27,11 @@ async function getTasks(req, res) {
   }
 }
 
-/** * GET /api/tasks/:taskId * Success: 200 { message, task } * Server errors: 500 { message } */
+/**
+ * GET /api/tasks/:taskId
+ * Success: 200 { message, task }
+ * Server errors: 500 { message }
+ */
 async function getTaskById(req, res) {
   try {
     const taskId = Number(req.params.taskId);
@@ -44,12 +48,12 @@ async function getTaskById(req, res) {
       message: 'Task retrieved successfully', task
     });
   } catch (error) {
-      console.error('Error retrieving task:', error.message);
-      return res.status(500).json({
-        message: 'Unable to retrieve task'
-      });
-    }
+    console.error('Error retrieving task:', error.message);
+    return res.status(500).json({
+      message: 'Unable to retrieve task'
+    });
   }
+}
 
 /**
  * POST /api/tasks
@@ -84,8 +88,38 @@ async function createTask(req, res) {
   }
 }
 
+/**
+ * DELETE /api/tasks/:taskId
+ * Success: 200 { message }
+ * Server errors: 500 { message }
+ */
+async function deleteTask(req, res) {
+  try {
+    const taskId = Number(req.params.taskId);
+
+    const deletedTask = await taskService.deleteTask(taskId);
+
+    if(!deletedTask) {
+      return res.status(404).json({
+        message: 'Task not found'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Task deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting task:', error.message);
+    return res.status(500).json({
+      message: 'Unable to delete task'
+    });
+  }
+}
+
+
 module.exports = {
   createTask,
   getTaskById,
+  deleteTask,
   getTasks
 };

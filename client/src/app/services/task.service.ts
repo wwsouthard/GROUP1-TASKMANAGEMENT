@@ -6,7 +6,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CreateTaskRequest, CreateTaskResponse, GetTasksResponse, GetTaskByIdResponse } from '../models/task';
+import { CreateTaskRequest, CreateTaskResponse, GetTasksResponse, GetTaskByIdResponse, DeleteTaskResponse } from '../models/task';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +32,12 @@ export class TaskService {
    */
   createTask(payload: CreateTaskRequest): Observable<CreateTaskResponse> {
     return this.http.post<CreateTaskResponse>(`${this.apiBaseUrl}/api/tasks`, payload);
+  }
+
+  /**
+   * Delete a task via DELETE /api/tasks/:taskId
+   */
+  deleteTask(taskId: number): Observable<DeleteTaskResponse> {
+    return this.http.delete<DeleteTaskResponse>(`${this.apiBaseUrl}/api/tasks/${taskId}`);
   }
 }

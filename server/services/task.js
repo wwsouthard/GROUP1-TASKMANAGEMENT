@@ -6,6 +6,26 @@
 const Task = require('../models/task');
 const { VALID_STATUSES, VALID_PRIORITIES } = require('../models/task');
 
+/**
+ * Sprint 2 - Task Creation Upgrade
+ * Uses the new counter schema to generate taskId on the server to prevent duplicate values from being used
+ */
+const Counter = require('../models/counter');
+
+// Function to generate the next taskId in the counter
+async function getNextTaskId() {
+  const counter = await Counter.findByIdAndUpdate(
+    'taskId',
+    { $inc: { sequence: 1 } },
+    {
+      new: true,
+      upsert: true
+    }
+  );
+
+  return counter.sequence;
+}
+
 // Build a 400-style error the controller can map to a client response
 function buildValidationError(message) {
   const error = new Error(message);
@@ -68,6 +88,13 @@ async function getTask(taskId) {
 }
 
 /**
+ * Delete a specific task by its taskId
+ */
+async function deleteTask(taskId) {
+  return await Task.findOneAndDelete({ taskId });
+}
+
+/**
  * List all task documents.
  * Sorts newest modified tasks first so the list is consistent for the UI.
  */
@@ -105,6 +132,7 @@ async function createTask(payload) {
   // Atlas requires dateCreated and dateModified on every task document
   const now = new Date();
   const taskData = {
+    taskId: await getNextTaskId(),
     title,
     status: payload.status,
     priority: payload.priority,
@@ -114,11 +142,6 @@ async function createTask(payload) {
     dateCreated: now,
     dateModified: now
   };
-
-  // Optional numeric taskId — only include when the client sends a real value (omit null/empty)
-  if (payload.taskId !== undefined && payload.taskId !== null && payload.taskId !== '') {
-    taskData.taskId = payload.taskId;
-  }
 
   try {
     return await Task.create(taskData);
@@ -148,5 +171,6 @@ module.exports = {
   createTask,
   getTask,
   listTasks,
+  deleteTask,
   validateCreateTaskInput
 };

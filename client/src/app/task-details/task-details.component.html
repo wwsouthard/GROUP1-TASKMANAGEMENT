@@ -15,4 +15,6 @@
     <p><b>Due Date:</b> {{ task.dueDate | date:'longDate' }}</p>
     <p><b>Task ID:</b> {{ task.taskId }}</p>
   </div>
+
+  <button [routerLink]="['/tasks', task?.taskId, 'delete']" class="btn btn-danger">Delete Task</button>
 </section>
