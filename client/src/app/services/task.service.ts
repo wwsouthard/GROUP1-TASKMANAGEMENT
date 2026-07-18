@@ -6,7 +6,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CreateTaskRequest, CreateTaskResponse, GetTasksResponse, GetTaskByIdResponse } from '../models/task';
+import {
+  CreateTaskRequest,
+  CreateTaskResponse,
+  GetTasksResponse,
+  GetTaskByIdResponse,
+  UpdateTaskRequest,
+  UpdateTaskResponse
+} from '../models/task';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +39,12 @@ export class TaskService {
    */
   createTask(payload: CreateTaskRequest): Observable<CreateTaskResponse> {
     return this.http.post<CreateTaskResponse>(`${this.apiBaseUrl}/api/tasks`, payload);
+  }
+
+  /**
+   * Update an existing task via PUT /api/tasks/:taskId
+   */
+  updateTask(taskId: number, payload: UpdateTaskRequest): Observable<UpdateTaskResponse> {
+    return this.http.put<UpdateTaskResponse>(`${this.apiBaseUrl}/api/tasks/${taskId}`, payload);
   }
 }

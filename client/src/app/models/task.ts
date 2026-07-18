@@ -52,5 +52,21 @@ export interface CreateTaskResponse {
   task: Task;
 }
 
+/** Request body for PUT /api/tasks/:taskId (editable fields only; taskId is in the URL) */
+export interface UpdateTaskRequest {
+  title: string;
+  description?: string | null;
+  status: TaskStatus;
+  priority: TaskPriority;
+  dueDate?: string | null;
+  projectId: number;
+}
+
+/** Standard success response from the Update Task API */
+export interface UpdateTaskResponse {
+  message: string;
+  task: Task;
+}
+
 export const TASK_STATUSES: TaskStatus[] = ['Pending', 'In Progress', 'Completed'];
 export const TASK_PRIORITIES: TaskPriority[] = ['Low', 'Medium', 'High'];
