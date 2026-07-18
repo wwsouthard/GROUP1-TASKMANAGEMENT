@@ -43,7 +43,7 @@ export interface GetTasksResponse {
 /** Standard success response from the Get Task By Id API */
 export interface GetTaskByIdResponse {
   message: string;
-  task: Task;
+  task: Task | null;
 }
 
 /** Standard success response from the Create Task API */

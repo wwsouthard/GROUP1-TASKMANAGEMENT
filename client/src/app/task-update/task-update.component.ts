@@ -164,10 +164,20 @@ export class TaskUpdateComponent implements OnInit {
     this.isTaskLoaded = true;
   }
 
-  /** Convert API dueDate to yyyy-MM-dd for an HTML date input */
+  /** Convert API dueDate to yyyy-MM-dd for an HTML date input.
+   * Atlas stores date-only values as UTC midnight; prefer the UTC calendar
+   * date (or a leading yyyy-MM-dd prefix) so the form does not shift a day.
+   */
   private formatDueDateForInput(dueDate: string | Date | null | undefined): string {
     if (dueDate === undefined || dueDate === null || dueDate === '') {
       return '';
+    }
+
+    if (typeof dueDate === 'string') {
+      const dateOnlyMatch = /^(\d{4}-\d{2}-\d{2})/.exec(dueDate);
+      if (dateOnlyMatch) {
+        return dateOnlyMatch[1];
+      }
     }
 
     const date = dueDate instanceof Date ? dueDate : new Date(dueDate);

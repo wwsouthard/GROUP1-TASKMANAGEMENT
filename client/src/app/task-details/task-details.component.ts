@@ -31,7 +31,7 @@ export class TaskDetailsComponent implements OnInit {
 
     this.taskService.getTaskById(taskId).subscribe({
       next: (response) => {
-        this.task = response.task;
+        this.task = response.task ?? undefined;
         this.isLoading = false;
       },
       error: () => {

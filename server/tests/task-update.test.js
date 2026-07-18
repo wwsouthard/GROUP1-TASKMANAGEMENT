@@ -108,4 +108,19 @@ describe('PUT /api/tasks/:taskId', () => {
     expect(response.body.message).not.toBe('Task updated successfully');
     expect(taskService.updateTask).toHaveBeenCalledTimes(1);
   });
+
+  // Test 4: non-numeric route param is rejected in the controller (service never called)
+  it('should return 400 when the taskId is invalid', async () => {
+    const response = await request(app).put('/api/tasks/not-a-number').send({
+      title: 'Updated sprint documentation',
+      status: 'In Progress',
+      priority: 'High',
+      projectId: 1000
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Invalid task ID');
+    expect(response.body.task).toBeUndefined();
+    expect(taskService.updateTask).not.toHaveBeenCalled();
+  });
 });
