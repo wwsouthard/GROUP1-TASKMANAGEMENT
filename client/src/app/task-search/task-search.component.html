@@ -1,0 +1,56 @@
+<section class="task-search">
+  <div class="task-search__header">
+    <h1>Search Tasks</h1>
+    <a routerLink="/tasks">Back to Task List</a>
+  </div>
+
+  <form class="task-search__form" (ngSubmit)="searchTasks()">
+    <label for="searchQuery">Search by title, description, status, priority, task ID, or project ID</label>
+
+    <div class="task-search__controls">
+      <input
+        id="searchQuery"
+        name="searchQuery"
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Example: login, Pending, High, 1000"
+      />
+
+      <button type="submit" [disabled]="isLoading">
+        {{ isLoading ? 'Searching...' : 'Search' }}
+      </button>
+    </div>
+  </form>
+
+  @if (errorMessage) {
+    <p class="task-search__error">{{ errorMessage }}</p>
+  }
+
+  @if (!errorMessage && hasSearched && !isLoading && tasks.length === 0) {
+    <p>No tasks matched your search.</p>
+  }
+
+  @if (tasks.length > 0) {
+    <table class="task-search__table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Project ID</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (task of tasks; track task._id || task.taskId || task.title) {
+          <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.priority }}</td>
+            <td>{{ task.projectId }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

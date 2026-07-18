@@ -75,6 +75,39 @@ async function listTasks() {
   return Task.find({}).sort({ dateModified: -1 });
 }
 
+
+/**
+ * Search task documents by title, description, status, priority, projectId, or taskId.
+ * Empty searches return an empty array so the UI does not accidentally load everything.
+ */
+async function searchTasks(query = '') {
+  const searchTerm = String(query || '').trim();
+
+  if (searchTerm === '') {
+    return [];
+  }
+
+  // Escape special regex characters so user input is treated as text
+  const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const searchRegex = new RegExp(escapedSearchTerm, 'i');
+
+  const searchConditions = [
+    { title: searchRegex },
+    { description: searchRegex },
+    { status: searchRegex },
+    { priority: searchRegex }
+  ];
+
+  const numericSearchTerm = Number(searchTerm);
+
+  if (!Number.isNaN(numericSearchTerm)) {
+    searchConditions.push({ projectId: numericSearchTerm });
+    searchConditions.push({ taskId: numericSearchTerm });
+  }
+
+  return Task.find({ $or: searchConditions }).sort({ dateModified: -1 });
+}
+
 /**
  * Create a new task document.
  * Sets dateCreated/dateModified, checks title uniqueness, then saves.
@@ -148,5 +181,6 @@ module.exports = {
   createTask,
   getTask,
   listTasks,
+  searchTasks,
   validateCreateTaskInput
 };

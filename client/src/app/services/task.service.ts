@@ -3,7 +3,7 @@
  * Uses the configured environment apiBaseUrl for all HTTP calls.
  */
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CreateTaskRequest, CreateTaskResponse, GetTasksResponse, GetTaskByIdResponse } from '../models/task';
@@ -25,6 +25,15 @@ export class TaskService {
   /** * Get a task by it's taskId via GET /api/tasks/:taskId */
   getTaskById(taskId: number): Observable<GetTaskByIdResponse> {
     return this.http.get<GetTaskByIdResponse>(`${this.apiBaseUrl}/api/tasks/${taskId}`);
+  }
+
+
+  /**
+   * Search tasks via GET /api/tasks/search?query=value
+   */
+  searchTasks(query: string): Observable<GetTasksResponse> {
+    const params = new HttpParams().set('query', query);
+    return this.http.get<GetTasksResponse>(`${this.apiBaseUrl}/api/tasks/search`, { params });
   }
 
   /**
