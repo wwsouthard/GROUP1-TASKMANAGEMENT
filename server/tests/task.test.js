@@ -6,6 +6,8 @@
 const request = require('supertest');
 const app = require('../app');
 const Task = require('../models/task');
+// Adding Counter to required section for new taskId generation
+const Counter = require('../models/counter');
 
 // Mock the Task model so create/findOne never hit the real database
 jest.mock('../models/task', () => ({
@@ -15,10 +17,20 @@ jest.mock('../models/task', () => ({
   VALID_PRIORITIES: ['Low', 'Medium', 'High']
 }));
 
+// Mock the Counter model so counter will be able to generate new taskIds
+jest.mock('../models/counter.js', () => ({
+  findByIdAndUpdate: jest.fn()
+}));
+
 describe('POST /api/tasks', () => {
   // Reset mocks between tests so cases do not depend on execution order
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  // Mock the MongoDB return value so that tests can reference the generated taskId
+  Counter.findByIdAndUpdate.mockResolvedValue({
+    sequence: 1000
   });
 
   // Test 1: valid payload creates a task and returns 201 + standard success body
@@ -32,7 +44,9 @@ describe('POST /api/tasks', () => {
       dueDate: '2026-07-20T00:00:00.000Z'
     };
 
+    // Added taskId 1000 to follow new counter method to taskId generation
     const createdTask = {
+      taskId: 1000,
       _id: '507f1f77bcf86cd799439011',
       title: requestBody.title,
       description: requestBody.description,
@@ -41,8 +55,7 @@ describe('POST /api/tasks', () => {
       projectId: requestBody.projectId,
       dueDate: new Date(requestBody.dueDate),
       dateCreated: new Date('2026-07-11T16:00:00.000Z'),
-      dateModified: new Date('2026-07-11T16:00:00.000Z'),
-      taskId: null
+      dateModified: new Date('2026-07-11T16:00:00.000Z')
     };
 
     // No existing task with this title; create resolves with the saved document
