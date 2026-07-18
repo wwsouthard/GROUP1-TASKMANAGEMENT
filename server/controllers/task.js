@@ -1,6 +1,6 @@
 /**
- * Sprint 1 — Task controller
- * Handles HTTP for create-task: calls the service and returns standard JSON responses.
+ * Task controller
+ * Handles HTTP for task APIs: calls the service and returns standard JSON responses.
  * Does not expose stack traces or raw database errors to the client.
  */
 const taskService = require('../services/task');
@@ -84,8 +84,49 @@ async function createTask(req, res) {
   }
 }
 
+/**
+ * PUT /api/tasks/:taskId
+ * Success: 200 { message, task }
+ * Client errors: 400 / 404 / 409 { message }
+ * Server errors: 500 { message }
+ */
+async function updateTask(req, res) {
+  try {
+    const taskId = Number(req.params.taskId);
+
+    // Reject non-numeric route params before any service/database work
+    if (Number.isNaN(taskId)) {
+      return res.status(400).json({
+        message: 'Invalid task ID'
+      });
+    }
+
+    const task = await taskService.updateTask(taskId, req.body);
+
+    return res.status(200).json({
+      message: 'Task updated successfully',
+      task
+    });
+  } catch (error) {
+    // Known client errors from the service (validation, not found, or duplicate title)
+    if (error.statusCode === 400 || error.statusCode === 404 || error.statusCode === 409) {
+      return res.status(error.statusCode).json({
+        message: error.message
+      });
+    }
+
+    // Log server-side detail only; return a generic message to the client
+    console.error('Error updating task:', error.message);
+
+    return res.status(500).json({
+      message: 'Unable to update task'
+    });
+  }
+}
+
 module.exports = {
   createTask,
   getTaskById,
-  getTasks
+  getTasks,
+  updateTask
 };
