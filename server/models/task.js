@@ -11,11 +11,11 @@ const VALID_PRIORITIES = ['Low', 'Medium', 'High'];
 
 const taskSchema = new mongoose.Schema(
   {
-    // Updated from Sprint 1 design to now require taskId since it is the field used for task Details and task deletion
-    // taskId will be generated on the server automatically when new create task requests are generated
+    // Optional numeric task ID (Atlas sparse unique index).
+    // Do not default to null — null values are indexed and would collide on unique sparse taskId.
+    // Omit the field unless the client provides a value.
     taskId: {
-      type: Number,
-      unique: true
+      type: Number
     },
     // Required, unique business key for tasks
     title: {

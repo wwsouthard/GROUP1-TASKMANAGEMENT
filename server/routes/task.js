@@ -16,7 +16,4 @@ router.get('/:taskId', taskController.getTaskById);
 // Create Task API — POST /api/tasks
 router.post('/', taskController.createTask);
 
-// Delete Task using its taskId - DELETE /api/tasks/:taskId
-router.delete('/:taskId', taskController.deleteTask);
-
 module.exports = router;
