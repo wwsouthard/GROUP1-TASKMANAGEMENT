@@ -59,4 +59,12 @@ describe('DELETE /api/tasks/:taskId', () => {
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('Unable to delete task');
   });
+
+  it('should return 400 when the taskId is invalid', async () => {
+    const response = await request(app).delete('/api/tasks/not-a-number');
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe('Invalid task ID');
+    expect(taskService.deleteTask).not.toHaveBeenCalled();
+  });
 });

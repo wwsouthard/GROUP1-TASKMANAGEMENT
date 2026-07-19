@@ -17,8 +17,7 @@
 
     <p class="task-details__actions" *ngIf="task.taskId != null">
       <a class="task-details__edit" [routerLink]="['/tasks', task.taskId, 'edit']">Edit Task</a>
+      <button [routerLink]="['/tasks', task.taskId, 'delete']" class="btn btn-danger">Delete Task</button>
     </p>
   </div>
-
-  <button [routerLink]="['/tasks', task?.taskId, 'delete']" class="btn btn-danger">Delete Task</button>
 </section>

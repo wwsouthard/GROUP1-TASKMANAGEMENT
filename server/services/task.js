@@ -12,8 +12,32 @@ const { VALID_STATUSES, VALID_PRIORITIES } = require('../models/task');
  */
 const Counter = require('../models/counter');
 
-// Function to generate the next taskId in the counter
+// Function to generate the next taskId in the counter.
+// Raises the counter to at least max(existing taskId) before incrementing so
+// new IDs cannot collide with Atlas fixtures that predate the counter.
 async function getNextTaskId() {
+  let floor = 0;
+
+  try {
+    const query = Task.findOne({ taskId: { $type: 'number' } });
+    // Real Mongoose queries are chainable; some unit-test mocks resolve directly.
+    if (query && typeof query.sort === 'function') {
+      const maxDoc = await query.sort({ taskId: -1 }).select({ taskId: 1 }).lean();
+      if (maxDoc && typeof maxDoc.taskId === 'number') {
+        floor = maxDoc.taskId;
+      }
+    }
+  } catch (error) {
+    // Fall through with floor 0; Counter increment still proceeds.
+  }
+
+  // Ensure sequence is at least the highest existing taskId before $inc.
+  await Counter.findByIdAndUpdate(
+    'taskId',
+    { $max: { sequence: floor } },
+    { upsert: true }
+  );
+
   const counter = await Counter.findByIdAndUpdate(
     'taskId',
     { $inc: { sequence: 1 } },

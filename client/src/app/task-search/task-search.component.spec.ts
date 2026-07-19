@@ -32,6 +32,7 @@ describe('TaskSearchComponent', () => {
     const mockTasks = [
       {
         _id: 'task-1',
+        taskId: 23,
         title: 'Design login screen',
         status: 'Pending' as const,
         priority: 'High' as const,

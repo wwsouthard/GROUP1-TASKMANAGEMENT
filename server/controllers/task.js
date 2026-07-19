@@ -161,6 +161,13 @@ async function deleteTask(req, res) {
   try {
     const taskId = Number(req.params.taskId);
 
+    // Reject non-numeric route params before any service/database work (same as GET/PUT)
+    if (Number.isNaN(taskId)) {
+      return res.status(400).json({
+        message: 'Invalid task ID'
+      });
+    }
+
     const deletedTask = await taskService.deleteTask(taskId);
 
     if(!deletedTask) {
