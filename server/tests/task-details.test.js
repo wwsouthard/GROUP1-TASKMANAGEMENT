@@ -10,7 +10,6 @@ const app = express();
 
 app.use(express.json());
 
-// Match your real route
 app.get('/api/tasks/:taskId', taskController.getTaskById);
 
 describe('GET /api/tasks/:taskId', () => {
@@ -66,22 +65,16 @@ describe('GET /api/tasks/:taskId', () => {
       new Error('Database connection failed')
     );
 
-    const response = await request(app)
-      .get('/api/tasks/23');
+    const response = await request(app).get('/api/tasks/23');
 
     expect(response.statusCode).toBe(500);
+    expect(response.body.message).toEqual('Unable to retrieve task');
 
-    expect(response.body).toEqual({
-      message: 'Unable to retrieve task'
-    });
-
-    expect(taskService.getTask)
-      .toHaveBeenCalledWith(23);
+    expect(taskService.getTask).toHaveBeenCalledWith(23);
   });
 
   it('should handle an invalid taskId', async () => {
-    const response = await request(app)
-      .get('/api/tasks/not-a-number');
+    const response = await request(app).get('/api/tasks/not-a-number');
 
     expect(response.statusCode).toBe(400);
   });
