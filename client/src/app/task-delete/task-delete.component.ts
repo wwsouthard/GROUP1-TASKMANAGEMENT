@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { Task } from '../models/task';
+import { Task, TaskPriority, TaskStatus } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 @Component({
@@ -71,5 +71,27 @@ export class TaskDeleteComponent implements OnInit {
 
   cancel(): void {
     this.router.navigate(['/tasks', this.taskId]);
+  }
+
+  statusBadgeClass(status: TaskStatus): string {
+    switch (status) {
+      case 'In Progress':
+        return 'badge badge--progress';
+      case 'Completed':
+        return 'badge badge--completed';
+      default:
+        return 'badge badge--pending';
+    }
+  }
+
+  priorityBadgeClass(priority: TaskPriority): string {
+    switch (priority) {
+      case 'High':
+        return 'badge badge--high';
+      case 'Medium':
+        return 'badge badge--medium';
+      default:
+        return 'badge badge--low';
+    }
   }
 }

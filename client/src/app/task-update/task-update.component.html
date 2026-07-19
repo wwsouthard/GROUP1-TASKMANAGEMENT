@@ -14,7 +14,12 @@
   </p>
 
   @if (isLoading) {
-    <p class="alert alert--info" role="status">Loading task...</p>
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__line skeleton__line--title"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+    </div>
   }
 
   @if (errorMessage) {

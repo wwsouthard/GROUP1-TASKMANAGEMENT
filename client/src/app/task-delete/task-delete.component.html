@@ -13,7 +13,10 @@
   </p>
 
   @if (isLoading) {
-    <p class="alert alert--info" role="status">Loading task...</p>
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__line skeleton__line--title"></div>
+      <div class="skeleton__row"></div>
+    </div>
   }
 
   @if (errorMessage) {
@@ -21,20 +24,25 @@
   }
 
   @if (task) {
-    <dl class="meta-list">
-      <div class="meta-list__row">
-        <dt class="meta-list__label">Title</dt>
-        <dd class="meta-list__value">{{ task.title }}</dd>
+    <div class="warning-panel">
+      <p class="warning-panel__title">You are about to permanently remove:</p>
+
+      <div class="page__badges">
+        <span [class]="statusBadgeClass(task.status)">{{ task.status }}</span>
+        <span [class]="priorityBadgeClass(task.priority)">{{ task.priority }}</span>
       </div>
-      <div class="meta-list__row">
-        <dt class="meta-list__label">Task ID</dt>
-        <dd class="meta-list__value">{{ task.taskId }}</dd>
-      </div>
-      <div class="meta-list__row">
-        <dt class="meta-list__label">Status</dt>
-        <dd class="meta-list__value">{{ task.status }}</dd>
-      </div>
-    </dl>
+
+      <dl class="meta-list">
+        <div class="meta-list__row">
+          <dt class="meta-list__label">Title</dt>
+          <dd class="meta-list__value">{{ task.title }}</dd>
+        </div>
+        <div class="meta-list__row">
+          <dt class="meta-list__label">Task ID</dt>
+          <dd class="meta-list__value">{{ task.taskId }}</dd>
+        </div>
+      </dl>
+    </div>
 
     <div class="page__actions">
       <button

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Task } from '../models/task';
+import { Task, TaskPriority, TaskStatus } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 @Component({
@@ -46,5 +46,27 @@ export class TaskSearchComponent {
         this.isLoading = false;
       }
     });
+  }
+
+  statusBadgeClass(status: TaskStatus): string {
+    switch (status) {
+      case 'In Progress':
+        return 'badge badge--progress';
+      case 'Completed':
+        return 'badge badge--completed';
+      default:
+        return 'badge badge--pending';
+    }
+  }
+
+  priorityBadgeClass(priority: TaskPriority): string {
+    switch (priority) {
+      case 'High':
+        return 'badge badge--high';
+      case 'Medium':
+        return 'badge badge--medium';
+      default:
+        return 'badge badge--low';
+    }
   }
 }

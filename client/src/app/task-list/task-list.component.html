@@ -2,14 +2,19 @@
   <header class="page__header">
     <div>
       <h1>Tasks</h1>
-      <p class="page__intro">View all tasks in the Task Management System.</p>
+      <p class="page__intro">Scan, open, and manage work across your projects.</p>
     </div>
 
     <a class="btn btn--primary" routerLink="/tasks/create">Create Task</a>
   </header>
 
   @if (isLoading) {
-    <p class="alert alert--info" role="status">Loading tasks...</p>
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+    </div>
   }
 
   @if (errorMessage) {
@@ -17,48 +22,58 @@
   }
 
   @if (!isLoading && !errorMessage && tasks.length === 0) {
-    <p class="alert alert--info">No tasks found.</p>
+    <div class="empty-state">
+      <h2>No tasks yet</h2>
+      <p>Create your first task to start tracking status, priority, and due dates.</p>
+      <a class="btn btn--primary" routerLink="/tasks/create">Create Task</a>
+    </div>
   }
 
   @if (!isLoading && !errorMessage && tasks.length > 0) {
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Status</th>
-          <th>Priority</th>
-          <th>Project ID</th>
-          <th>Due Date</th>
-          <th>Details</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        @for (task of tasks; track task.taskId || task._id || task.title) {
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
           <tr>
-            <td>
-              @if (task.taskId != null) {
-                <a class="data-table__link" [routerLink]="['/tasks', task.taskId]">
-                  {{ task.title }}
-                </a>
-              } @else {
-                {{ task.title }}
-              }
-            </td>
-            <td>{{ task.status }}</td>
-            <td>{{ task.priority }}</td>
-            <td>{{ task.projectId }}</td>
-            <td>{{ task.dueDate || 'No due date' }}</td>
-            <td>
-              @if (task.taskId != null) {
-                <a class="data-table__link" [routerLink]="['/tasks', task.taskId]">View</a>
-              } @else {
-                <span class="data-table__muted">No ID</span>
-              }
-            </td>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Project</th>
+            <th>Due Date</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          @for (task of tasks; track task.taskId || task._id || task.title) {
+            <tr>
+              <td>
+                @if (task.taskId != null) {
+                  <a class="data-table__link" [routerLink]="['/tasks', task.taskId]">
+                    {{ task.title }}
+                  </a>
+                } @else {
+                  {{ task.title }}
+                }
+              </td>
+              <td>
+                <span [class]="statusBadgeClass(task.status)">{{ task.status }}</span>
+              </td>
+              <td>
+                <span [class]="priorityBadgeClass(task.priority)">{{ task.priority }}</span>
+              </td>
+              <td>{{ task.projectId }}</td>
+              <td>
+                @if (task.dueDate) {
+                  <span [class.data-table__date--overdue]="isOverdue(task.dueDate)">
+                    {{ task.dueDate | date:'mediumDate' }}
+                  </span>
+                } @else {
+                  <span class="data-table__muted">No due date</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   }
 </section>
