@@ -8,10 +8,12 @@ import { TaskCreateComponent } from './task-create/task-create.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { TaskDeleteComponent } from './task-delete/task-delete.component';
+import { TaskSearchComponent } from './task-search/task-search.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'tasks' },
   { path: 'tasks/create', component: TaskCreateComponent },
+  { path: 'tasks/search', component: TaskSearchComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/:taskId', component: TaskDetailsComponent },
   { path: 'tasks/:taskId/delete', component: TaskDeleteComponent},

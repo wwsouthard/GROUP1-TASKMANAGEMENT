@@ -55,6 +55,30 @@ async function getTaskById(req, res) {
   }
 }
 
+
+/**
+ * GET /api/tasks/search?query=value
+ * Success: 200 { message, tasks }
+ * Server errors: 500 { message }
+ */
+async function searchTasks(req, res) {
+  try {
+    const query = req.query.query || '';
+    const tasks = await taskService.searchTasks(query);
+
+    return res.status(200).json({
+      message: 'Tasks searched successfully',
+      tasks
+    });
+  } catch (error) {
+    console.error('Error searching tasks:', error.message);
+
+    return res.status(500).json({
+      message: 'Unable to search tasks'
+    });
+  }
+}
+
 /**
  * POST /api/tasks
  * Success: 201 { message, task }
@@ -121,5 +145,6 @@ module.exports = {
   createTask,
   getTaskById,
   deleteTask,
-  getTasks
+  getTasks,
+  searchTasks
 };
