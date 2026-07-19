@@ -17,3 +17,18 @@
   color: #1c1917;
   text-decoration: underline;
 }
+
+.task-details__actions {
+  margin: 1.25rem 0 0;
+}
+
+.task-details__edit {
+  color: #44403c;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.task-details__edit:hover {
+  color: #1c1917;
+  text-decoration: underline;
+}

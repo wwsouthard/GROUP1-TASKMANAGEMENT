@@ -1,6 +1,6 @@
 /**
- * Sprint 1 — Task service
- * Contains create-task business rules: required-field checks, enum validation,
+ * Task service
+ * Contains create/update business rules: required-field checks, enum validation,
  * unique title enforcement, and persistence via the Task model.
  */
 const Task = require('../models/task');
@@ -39,6 +39,14 @@ function buildConflictError(message) {
   const error = new Error(message);
   error.name = 'TaskConflictError';
   error.statusCode = 409;
+  return error;
+}
+
+// Build a 404-style error when a taskId does not match any document
+function buildNotFoundError(message) {
+  const error = new Error(message);
+  error.name = 'TaskNotFoundError';
+  error.statusCode = 404;
   return error;
 }
 
@@ -200,11 +208,77 @@ async function createTask(payload) {
   }
 }
 
+/**
+ * Update an existing task document by numeric taskId.
+ * Applies only editable fields, refreshes dateModified, and enforces unique title
+ * while excluding the task being updated. Does not change _id, taskId, or dateCreated.
+ */
+async function updateTask(taskId, payload) {
+  // Same required-field / enum / projectId rules as create (editable fields only)
+  validateCreateTaskInput(payload);
+
+  const task = await Task.findOne({ taskId });
+
+  if (!task) {
+    throw buildNotFoundError('Task not found');
+  }
+
+  const title = String(payload.title).trim();
+
+  // Unique title among other tasks — allow keeping the same title on this task
+  const duplicateTitle = await Task.findOne({ title, taskId: { $ne: taskId } });
+
+  if (duplicateTitle) {
+    throw buildConflictError('A task with this title already exists');
+  }
+
+  // Normalize empty optional strings so Mongoose does not attempt invalid Date casts
+  const description =
+    payload.description === undefined || payload.description === null || payload.description === ''
+      ? null
+      : payload.description;
+  const dueDate =
+    payload.dueDate === undefined || payload.dueDate === null || payload.dueDate === ''
+      ? null
+      : payload.dueDate;
+
+  // Assign only editable fields; never overwrite _id, taskId, or dateCreated
+  task.title = title;
+  task.description = description;
+  task.status = payload.status;
+  task.priority = payload.priority;
+  task.dueDate = dueDate;
+  task.projectId = payload.projectId;
+  task.dateModified = new Date();
+
+  try {
+    // save() runs Mongoose schema validators (required, enum, etc.)
+    return await task.save();
+  } catch (error) {
+    // Mongo duplicate-key fallback (title unique index)
+    if (error && error.code === 11000) {
+      throw buildConflictError('A task with this title already exists');
+    }
+
+    // Convert Mongoose ValidationError / CastError into a client-safe 400 message
+    if (error.name === 'ValidationError' || error.name === 'CastError') {
+      const firstMessage = Object.values(error.errors || {})
+        .map((err) => err.message)
+        .filter(Boolean)[0];
+      throw buildValidationError(firstMessage || error.message || 'Invalid task data');
+    }
+
+    // Unexpected errors bubble to the controller as 500
+    throw error;
+  }
+}
+
 module.exports = {
   createTask,
   getTask,
   listTasks,
   deleteTask,
   searchTasks,
+  updateTask,
   validateCreateTaskInput
 };

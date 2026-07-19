@@ -1,5 +1,5 @@
 /**
- * Sprint 1 — Task routes
+ * Task routes
  * Mounted at /api/tasks in app.js (same /api/... pattern as the health check).
  */
 const express = require('express');
@@ -18,6 +18,9 @@ router.get('/:taskId', taskController.getTaskById);
 
 // Create Task API — POST /api/tasks
 router.post('/', taskController.createTask);
+
+// Update Task By taskId — PUT /api/tasks/:taskId
+router.put('/:taskId', taskController.updateTask);
 
 // Delete Task using its taskId - DELETE /api/tasks/:taskId
 router.delete('/:taskId', taskController.deleteTask);

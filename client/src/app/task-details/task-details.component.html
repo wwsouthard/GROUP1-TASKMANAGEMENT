@@ -14,6 +14,10 @@
     <p><b>Task Priority:</b> {{ task.priority }}</p>
     <p><b>Due Date:</b> {{ task.dueDate | date:'longDate' }}</p>
     <p><b>Task ID:</b> {{ task.taskId }}</p>
+
+    <p class="task-details__actions" *ngIf="task.taskId != null">
+      <a class="task-details__edit" [routerLink]="['/tasks', task.taskId, 'edit']">Edit Task</a>
+    </p>
   </div>
 
   <button [routerLink]="['/tasks', task?.taskId, 'delete']" class="btn btn-danger">Delete Task</button>

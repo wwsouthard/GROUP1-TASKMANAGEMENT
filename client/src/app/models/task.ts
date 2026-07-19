@@ -12,7 +12,7 @@ export type TaskPriority = 'Low' | 'Medium' | 'High';
 /** Task document shape returned by the API */
 export interface Task {
   _id?: string;
-  taskId: number,
+  taskId: number;
   title: string;
   description?: string | null;
   status: TaskStatus;
@@ -26,7 +26,7 @@ export interface Task {
 /**
  * Request body for POST /api/tasks
  * Sprint 2 Alteration:
- * taskId removed from ANgular interface as it is now generation on the server
+ * taskId removed from Angular interface as it is now generated on the server
  */
 export interface CreateTaskRequest {
   title: string;
@@ -46,7 +46,7 @@ export interface GetTasksResponse {
 /** Standard success response from the Get Task By Id API */
 export interface GetTaskByIdResponse {
   message: string;
-  task: Task;
+  task: Task | null;
 }
 
 /** Standard success response from the Create Task API */
@@ -58,6 +58,22 @@ export interface CreateTaskResponse {
 /** Standard success response from the Delete Task API */
 export interface DeleteTaskResponse {
   message: string;
+}
+
+/** Request body for PUT /api/tasks/:taskId (editable fields only; taskId is in the URL) */
+export interface UpdateTaskRequest {
+  title: string;
+  description?: string | null;
+  status: TaskStatus;
+  priority: TaskPriority;
+  dueDate?: string | null;
+  projectId: number;
+}
+
+/** Standard success response from the Update Task API */
+export interface UpdateTaskResponse {
+  message: string;
+  task: Task;
 }
 
 export const TASK_STATUSES: TaskStatus[] = ['Pending', 'In Progress', 'Completed'];
