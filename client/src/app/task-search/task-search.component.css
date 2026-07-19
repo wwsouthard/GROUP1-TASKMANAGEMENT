@@ -1,51 +1,5 @@
-.task-search {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 1rem;
-}
+/* Search Tasks — page uses shared global utilities */
 
-.task-search__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.task-search__form {
-  margin-bottom: 1rem;
-}
-
-.task-search__controls {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.task-search__controls input {
-  flex: 1;
-  padding: 0.6rem;
-}
-
-.task-search__controls button {
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-}
-
-.task-search__error {
-  color: #b00020;
-  font-weight: 600;
-}
-
-.task-search__table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.task-search__table th,
-.task-search__table td {
-  border: 1px solid #ddd;
-  padding: 0.75rem;
-  text-align: left;
+:host {
+  display: block;
 }

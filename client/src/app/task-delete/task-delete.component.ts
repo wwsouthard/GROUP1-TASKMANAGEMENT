@@ -1,30 +1,70 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
+import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task-delete',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './task-delete.component.html',
   styleUrl: './task-delete.component.css'
 })
-export class TaskDeleteComponent {
+export class TaskDeleteComponent implements OnInit {
   private readonly taskService = inject(TaskService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
   taskId = Number(this.route.snapshot.paramMap.get('taskId'));
+  task: Task | null = null;
+  isLoading = false;
+  isDeleting = false;
   errorMessage = '';
 
+  get hasValidTaskId(): boolean {
+    return !Number.isNaN(this.taskId);
+  }
+
+  ngOnInit(): void {
+    if (!this.hasValidTaskId) {
+      this.errorMessage = 'Invalid task ID.';
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.taskService.getTaskById(this.taskId).subscribe({
+      next: (response) => {
+        this.task = response.task ?? null;
+        if (!this.task) {
+          this.errorMessage = 'Task not found.';
+        }
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load task.';
+        this.isLoading = false;
+      }
+    });
+  }
+
   deleteTask(): void {
+    if (this.isDeleting) {
+      return;
+    }
+
+    this.isDeleting = true;
+    this.errorMessage = '';
+
     this.taskService.deleteTask(this.taskId).subscribe({
       next: () => {
         this.router.navigate(['/tasks']);
-      }, error: () => {
+      },
+      error: () => {
         this.errorMessage = 'Failed to delete task.';
+        this.isDeleting = false;
       }
     });
   }

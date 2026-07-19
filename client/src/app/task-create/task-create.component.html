@@ -1,26 +1,24 @@
 <!-- Sprint 1 — Create Task form -->
-<section class="task-create" aria-labelledby="create-task-heading">
+<section class="page page--narrow" aria-labelledby="create-task-heading">
   <h1 id="create-task-heading">Create Task</h1>
-  <p class="task-create__intro">
+  <p class="page__intro">
     Add a new task with a unique title, status, priority, and project.
   </p>
 
-  <!-- Success feedback after a successful API create -->
   @if (successMessage) {
-    <p class="task-create__alert task-create__alert--success" role="status">
+    <p class="alert alert--success" role="status">
       {{ successMessage }}
     </p>
   }
 
-  <!-- Error feedback for validation/API failures (e.g. duplicate title) -->
   @if (errorMessage) {
-    <p class="task-create__alert task-create__alert--error" role="alert">
+    <p class="alert alert--error" role="alert">
       {{ errorMessage }}
     </p>
   }
 
-  <form class="task-create__form" [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
-    <div class="task-create__field">
+  <form class="form" [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
       <label for="title">Title</label>
       <input
         id="title"
@@ -31,11 +29,11 @@
         [attr.aria-describedby]="title.invalid && title.touched ? 'title-error' : null"
       />
       @if (title.invalid && title.touched) {
-        <p id="title-error" class="task-create__error">Title is required.</p>
+        <p id="title-error" class="field__error">Title is required.</p>
       }
     </div>
 
-    <div class="task-create__field">
+    <div class="field">
       <label for="description">Description</label>
       <textarea
         id="description"
@@ -44,8 +42,8 @@
       ></textarea>
     </div>
 
-    <div class="task-create__row">
-      <div class="task-create__field">
+    <div class="form__row">
+      <div class="field">
         <label for="status">Status</label>
         <select
           id="status"
@@ -59,11 +57,11 @@
           }
         </select>
         @if (status.invalid && status.touched) {
-          <p id="status-error" class="task-create__error">Status is required.</p>
+          <p id="status-error" class="field__error">Status is required.</p>
         }
       </div>
 
-      <div class="task-create__field">
+      <div class="field">
         <label for="priority">Priority</label>
         <select
           id="priority"
@@ -77,19 +75,18 @@
           }
         </select>
         @if (priority.invalid && priority.touched) {
-          <p id="priority-error" class="task-create__error">Priority is required.</p>
+          <p id="priority-error" class="field__error">Priority is required.</p>
         }
       </div>
     </div>
 
-    <div class="task-create__row">
-      <div class="task-create__field">
+    <div class="form__row">
+      <div class="field">
         <label for="dueDate">Due date</label>
         <input id="dueDate" type="date" formControlName="dueDate" />
       </div>
 
-      <!-- projectId is required by the Create Task API / Atlas schema -->
-      <div class="task-create__field">
+      <div class="field">
         <label for="projectId">Project ID</label>
         <input
           id="projectId"
@@ -101,14 +98,15 @@
           [attr.aria-describedby]="projectId.invalid && projectId.touched ? 'projectId-error' : null"
         />
         @if (projectId.invalid && projectId.touched) {
-          <p id="projectId-error" class="task-create__error">Project ID is required.</p>
+          <p id="projectId-error" class="field__error">Project ID is required.</p>
         }
       </div>
     </div>
 
-    <div class="task-create__actions">
+    <div class="page__actions">
       <button
         type="submit"
+        class="btn btn--primary"
         [disabled]="taskForm.invalid || isSubmitting"
       >
         {{ isSubmitting ? 'Creating…' : 'Create Task' }}

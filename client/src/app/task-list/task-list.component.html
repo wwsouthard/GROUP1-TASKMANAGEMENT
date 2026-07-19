@@ -1,58 +1,64 @@
-<section class="task-list">
-  <header class="task-list__header">
+<section class="page page--wide">
+  <header class="page__header">
     <div>
       <h1>Tasks</h1>
-      <p>View all tasks in the Task Management System.</p>
+      <p class="page__intro">View all tasks in the Task Management System.</p>
     </div>
 
-    <a class="task-list__button" routerLink="/tasks/create">Create Task</a>
+    <a class="btn btn--primary" routerLink="/tasks/create">Create Task</a>
   </header>
 
-  <p *ngIf="isLoading" class="task-list__message">Loading tasks...</p>
+  @if (isLoading) {
+    <p class="alert alert--info" role="status">Loading tasks...</p>
+  }
 
-  <p *ngIf="errorMessage" class="task-list__message task-list__message--error">
-    {{ errorMessage }}
-  </p>
+  @if (errorMessage) {
+    <p class="alert alert--error" role="alert">{{ errorMessage }}</p>
+  }
 
-  <p *ngIf="!isLoading && !errorMessage && tasks.length === 0" class="task-list__message">
-    No tasks found.
-  </p>
+  @if (!isLoading && !errorMessage && tasks.length === 0) {
+    <p class="alert alert--info">No tasks found.</p>
+  }
 
-  <table *ngIf="!isLoading && !errorMessage && tasks.length > 0" class="task-list__table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Priority</th>
-        <th>Project ID</th>
-        <th>Due Date</th>
-        <th>Details</th>
-      </tr>
-    </thead>
+  @if (!isLoading && !errorMessage && tasks.length > 0) {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Project ID</th>
+          <th>Due Date</th>
+          <th>Details</th>
+        </tr>
+      </thead>
 
-    <tbody>
-      <tr *ngFor="let task of tasks">
-        <td>
-          @if (task.taskId != null) {
-            <a class="task-list__link" [routerLink]="['/tasks', task.taskId]">
-              {{ task.title }}
-            </a>
-          } @else {
-            {{ task.title }}
-          }
-        </td>
-        <td>{{ task.status }}</td>
-        <td>{{ task.priority }}</td>
-        <td>{{ task.projectId }}</td>
-        <td>{{ task.dueDate || 'No due date' }}</td>
-        <td>
-          @if (task.taskId != null) {
-            <a class="task-list__link" [routerLink]="['/tasks', task.taskId]">View</a>
-          } @else {
-            <span class="task-list__muted">No ID</span>
-          }
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <tbody>
+        @for (task of tasks; track task.taskId || task._id || task.title) {
+          <tr>
+            <td>
+              @if (task.taskId != null) {
+                <a class="data-table__link" [routerLink]="['/tasks', task.taskId]">
+                  {{ task.title }}
+                </a>
+              } @else {
+                {{ task.title }}
+              }
+            </td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.priority }}</td>
+            <td>{{ task.projectId }}</td>
+            <td>{{ task.dueDate || 'No due date' }}</td>
+            <td>
+              @if (task.taskId != null) {
+                <a class="data-table__link" [routerLink]="['/tasks', task.taskId]">View</a>
+              } @else {
+                <span class="data-table__muted">No ID</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </section>
