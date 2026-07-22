@@ -4,6 +4,7 @@
  * Search Tasks is available at /tasks/search.
  * Update Task is available at /tasks/:taskId/edit.
  * List All Tasks is available at /tasks.
+ * Create Project is available at /projects/create.
  */
 import { Routes } from '@angular/router';
 import { TaskCreateComponent } from './task-create/task-create.component';

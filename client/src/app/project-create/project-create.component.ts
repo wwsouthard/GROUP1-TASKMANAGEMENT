@@ -87,7 +87,7 @@ export class ProjectCreateComponent {
         this.isSubmitting = false;
         this.successMessage = response.message || 'Project created successfully';
         this.errorMessage = null;
-        void this.router.navigate(['/projects']);
+        void this.router.navigate(['/tasks']);
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
