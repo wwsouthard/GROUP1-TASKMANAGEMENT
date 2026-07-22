@@ -1,23 +1,62 @@
-<section class="task-details">
-  <p class="task-details__nav">
+<section class="page page--narrow" aria-labelledby="task-details-heading">
+  <p class="page__nav">
     <a routerLink="/tasks">← Back to tasks</a>
   </p>
 
-  <p *ngIf="isLoading">Loading Task</p>
+  @if (isLoading) {
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__line skeleton__line--title"></div>
+      <div class="skeleton__line"></div>
+      <div class="skeleton__line skeleton__line--short"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+    </div>
+  }
 
-  <p *ngIf="errorMessage">{{ errorMessage }}</p>
+  @if (errorMessage) {
+    <p class="alert alert--error" role="alert">{{ errorMessage }}</p>
+  }
 
-  <div *ngIf="task">
-    <h2>{{ task.title }}</h2>
-    <p>{{ task.description }}</p>
-    <p><b>Task Status:</b> {{ task.status }}</p>
-    <p><b>Task Priority:</b> {{ task.priority }}</p>
-    <p><b>Due Date:</b> {{ task.dueDate | date:'longDate' }}</p>
-    <p><b>Task ID:</b> {{ task.taskId }}</p>
+  @if (task) {
+    <h1 id="task-details-heading">{{ task.title }}</h1>
 
-    <p class="task-details__actions" *ngIf="task.taskId != null">
-      <a class="task-details__edit" [routerLink]="['/tasks', task.taskId, 'edit']">Edit Task</a>
-      <button [routerLink]="['/tasks', task.taskId, 'delete']" class="btn btn-danger">Delete Task</button>
-    </p>
-  </div>
+    <div class="page__badges">
+      <span [class]="statusBadgeClass(task.status)">{{ task.status }}</span>
+      <span [class]="priorityBadgeClass(task.priority)">{{ task.priority }}</span>
+    </div>
+
+    @if (task.description) {
+      <div class="description-block">{{ task.description }}</div>
+    }
+
+    <dl class="meta-list meta-list--grid">
+      <div class="meta-list__row">
+        <dt class="meta-list__label">Due Date</dt>
+        <dd class="meta-list__value">
+          @if (task.dueDate) {
+            <span [class.data-table__date--overdue]="isOverdue(task.dueDate)">
+              {{ task.dueDate | date:'longDate' }}
+            </span>
+          } @else {
+            No due date
+          }
+        </dd>
+      </div>
+      <div class="meta-list__row">
+        <dt class="meta-list__label">Task ID</dt>
+        <dd class="meta-list__value">{{ task.taskId }}</dd>
+      </div>
+      <div class="meta-list__row">
+        <dt class="meta-list__label">Project ID</dt>
+        <dd class="meta-list__value">{{ task.projectId }}</dd>
+      </div>
+    </dl>
+
+    @if (task.taskId != null) {
+      <div class="page__actions page__actions--sticky">
+        <a class="btn btn--secondary" [routerLink]="['/tasks', task.taskId, 'edit']">Edit Task</a>
+        <a class="btn btn--danger" [routerLink]="['/tasks', task.taskId, 'delete']">Delete Task</a>
+      </div>
+    }
+  }
 </section>

@@ -1,6 +1,6 @@
 <!-- Sprint 2 — Update Task form -->
-<section class="task-update" aria-labelledby="update-task-heading">
-  <p class="task-update__nav">
+<section class="page page--narrow" aria-labelledby="update-task-heading">
+  <p class="page__nav">
     @if (taskId !== null) {
       <a [routerLink]="['/tasks', taskId]">← Back to task</a>
     } @else {
@@ -9,31 +9,34 @@
   </p>
 
   <h1 id="update-task-heading">Update Task</h1>
-  <p class="task-update__intro">
+  <p class="page__intro">
     Edit this task’s title, status, priority, and project details.
   </p>
 
   @if (isLoading) {
-    <p class="task-update__message">Loading task...</p>
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__line skeleton__line--title"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+    </div>
   }
 
-  <!-- Load or submit API feedback (safe message strings only) -->
   @if (errorMessage) {
-    <p class="task-update__alert task-update__alert--error" role="alert">
+    <p class="alert alert--error" role="alert">
       {{ errorMessage }}
     </p>
   }
 
   @if (successMessage) {
-    <p class="task-update__alert task-update__alert--success" role="status">
+    <p class="alert alert--success" role="status">
       {{ successMessage }}
     </p>
   }
 
-  <!-- Form only after a successful load; remains visible for submit-time errors -->
   @if (!isLoading && isTaskLoaded) {
-    <form class="task-update__form" [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
-      <div class="task-update__field">
+    <form class="form" [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
         <label for="title">Title</label>
         <input
           id="title"
@@ -44,11 +47,11 @@
           [attr.aria-describedby]="title.invalid && title.touched ? 'title-error' : null"
         />
         @if (title.invalid && title.touched) {
-          <p id="title-error" class="task-update__error">Title is required.</p>
+          <p id="title-error" class="field__error">Title is required.</p>
         }
       </div>
 
-      <div class="task-update__field">
+      <div class="field">
         <label for="description">Description</label>
         <textarea
           id="description"
@@ -57,8 +60,8 @@
         ></textarea>
       </div>
 
-      <div class="task-update__row">
-        <div class="task-update__field">
+      <div class="form__row">
+        <div class="field">
           <label for="status">Status</label>
           <select
             id="status"
@@ -72,11 +75,11 @@
             }
           </select>
           @if (status.invalid && status.touched) {
-            <p id="status-error" class="task-update__error">Status is required.</p>
+            <p id="status-error" class="field__error">Status is required.</p>
           }
         </div>
 
-        <div class="task-update__field">
+        <div class="field">
           <label for="priority">Priority</label>
           <select
             id="priority"
@@ -90,18 +93,18 @@
             }
           </select>
           @if (priority.invalid && priority.touched) {
-            <p id="priority-error" class="task-update__error">Priority is required.</p>
+            <p id="priority-error" class="field__error">Priority is required.</p>
           }
         </div>
       </div>
 
-      <div class="task-update__row">
-        <div class="task-update__field">
+      <div class="form__row">
+        <div class="field">
           <label for="dueDate">Due date</label>
           <input id="dueDate" type="date" formControlName="dueDate" />
         </div>
 
-        <div class="task-update__field">
+        <div class="field">
           <label for="projectId">Project ID</label>
           <input
             id="projectId"
@@ -113,19 +116,20 @@
             [attr.aria-describedby]="projectId.invalid && projectId.touched ? 'projectId-error' : null"
           />
           @if (projectId.invalid && projectId.touched) {
-            <p id="projectId-error" class="task-update__error">Project ID is required.</p>
+            <p id="projectId-error" class="field__error">Project ID is required.</p>
           }
         </div>
       </div>
 
-      <div class="task-update__actions">
+      <div class="page__actions">
         <button
           type="submit"
+          class="btn btn--primary"
           [disabled]="taskForm.invalid || isSubmitting"
         >
           {{ isSubmitting ? 'Updating…' : 'Update Task' }}
         </button>
-        <a class="task-update__cancel" [routerLink]="['/tasks', taskId]">Cancel</a>
+        <a class="btn btn--ghost" [routerLink]="['/tasks', taskId]">Cancel</a>
       </div>
     </form>
   }

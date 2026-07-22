@@ -1,12 +1,66 @@
-<section class="task-delete">
-  <div>
-    <h2>Delete Task</h2>
-    <p>Are you sure you want to delete this task?</p>
-  </div>
+<section class="page page--narrow" aria-labelledby="delete-task-heading">
+  <p class="page__nav">
+    @if (hasValidTaskId) {
+      <a [routerLink]="['/tasks', taskId]">← Back to task</a>
+    } @else {
+      <a routerLink="/tasks">← Back to tasks</a>
+    }
+  </p>
 
-  <button class="btn btn-danger" (click)="deleteTask()">Yes, Delete Task</button>
+  <h1 id="delete-task-heading">Delete Task</h1>
+  <p class="page__intro">
+    Are you sure you want to delete this task? This action cannot be undone.
+  </p>
 
-  <button class="btn" (click)="cancel()">Cancel</button>
+  @if (isLoading) {
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__line skeleton__line--title"></div>
+      <div class="skeleton__row"></div>
+    </div>
+  }
 
-  <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+  @if (errorMessage) {
+    <p class="alert alert--error" role="alert">{{ errorMessage }}</p>
+  }
+
+  @if (task) {
+    <div class="warning-panel">
+      <p class="warning-panel__title">You are about to permanently remove:</p>
+
+      <div class="page__badges">
+        <span [class]="statusBadgeClass(task.status)">{{ task.status }}</span>
+        <span [class]="priorityBadgeClass(task.priority)">{{ task.priority }}</span>
+      </div>
+
+      <dl class="meta-list">
+        <div class="meta-list__row">
+          <dt class="meta-list__label">Title</dt>
+          <dd class="meta-list__value">{{ task.title }}</dd>
+        </div>
+        <div class="meta-list__row">
+          <dt class="meta-list__label">Task ID</dt>
+          <dd class="meta-list__value">{{ task.taskId }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="page__actions">
+      <button
+        type="button"
+        class="btn btn--danger"
+        (click)="deleteTask()"
+        [disabled]="isDeleting"
+      >
+        {{ isDeleting ? 'Deleting…' : 'Yes, Delete Task' }}
+      </button>
+      <button
+        type="button"
+        class="btn btn--secondary"
+        (click)="cancel()"
+        [disabled]="isDeleting"
+      >
+        Cancel
+      </button>
+    </div>
+  }
 </section>

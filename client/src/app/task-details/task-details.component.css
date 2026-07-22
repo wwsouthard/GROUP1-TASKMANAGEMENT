@@ -1,38 +1,5 @@
-.task-details {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 1.5rem 1rem 2.5rem;
-}
+/* Task details — page uses shared global utilities */
 
-.task-details__nav {
-  margin: 0 0 1rem;
-}
-
-.task-details__nav a {
-  color: #44403c;
-  text-decoration: none;
-}
-
-.task-details__nav a:hover {
-  color: #1c1917;
-  text-decoration: underline;
-}
-
-.task-details__actions {
-  margin: 1.25rem 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 1rem;
-}
-
-.task-details__edit {
-  color: #44403c;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.task-details__edit:hover {
-  color: #1c1917;
-  text-decoration: underline;
+:host {
+  display: block;
 }
