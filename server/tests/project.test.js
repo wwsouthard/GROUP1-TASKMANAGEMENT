@@ -45,7 +45,13 @@ describe('POST /api/projects', () => {
 
     expect(response.status).toBe(201);
     expect(response.body.message).toBe('Project created successfully');
-    expect(response.body.project).toMatchObject({ name: requestBody.name });
+    expect(response.body.project).toMatchObject({
+      projectId: 1,
+      name: requestBody.name,
+      startDate: createdProject.startDate.toISOString(),
+      dateCreated: createdProject.dateCreated.toISOString(),
+      dateModified: createdProject.dateModified.toISOString()
+    });
     expect(Project.findOne).toHaveBeenCalledWith({ name: requestBody.name });
     expect(Project.create).toHaveBeenCalledTimes(1);
   });
@@ -137,6 +143,14 @@ describe('POST /api/projects', () => {
     });
 
     expect(response.status).toBe(201);
+    expect(response.body.message).toBe('Project created successfully');
+    expect(response.body.project).toMatchObject({
+      projectId: 2,
+      name: 'Internal Tools',
+      startDate: createdProject.startDate.toISOString(),
+      dateCreated: createdProject.dateCreated.toISOString(),
+      dateModified: createdProject.dateModified.toISOString()
+    });
     expect(response.body.project.endDate).toBeNull();
     expect(response.body.project.description).toBeNull();
   });
