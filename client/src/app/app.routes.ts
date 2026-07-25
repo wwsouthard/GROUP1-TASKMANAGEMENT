@@ -12,6 +12,7 @@ import { TaskDetailsComponent } from './task-details/task-details.component';
 import { TaskDeleteComponent } from './task-delete/task-delete.component';
 import { TaskSearchComponent } from './task-search/task-search.component';
 import { TaskUpdateComponent } from './task-update/task-update.component';
+import { ProjectListComponent } from './project-list/project-list.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'tasks' },
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'tasks/:taskId/edit', component: TaskUpdateComponent },
   { path: 'tasks/:taskId/delete', component: TaskDeleteComponent },
   { path: 'tasks/:taskId', component: TaskDetailsComponent },
+  { path: 'projects', component: ProjectListComponent },
   { path: '**', redirectTo: 'tasks' }
 ];

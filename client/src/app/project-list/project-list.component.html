@@ -1,0 +1,70 @@
+<section class="page page--wide">
+  <header class="page__header">
+    <div>
+      <h1>Projects</h1>
+      <p class="page__intro">Review all projects connected to your task management system.</p>
+    </div>
+  </header>
+
+  @if (isLoading) {
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <p class="alert alert--error" role="alert">{{ errorMessage }}</p>
+  }
+
+  @if (!isLoading && !errorMessage && projects.length === 0) {
+    <div class="empty-state">
+      <h2>No projects yet</h2>
+      <p>Projects will appear here after they are added to the system.</p>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && projects.length > 0) {
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Project ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (project of projects; track project.projectId || project._id || project.name) {
+            <tr>
+              <td>{{ project.projectId }}</td>
+              <td>{{ project.name }}</td>
+              <td>
+                @if (project.description) {
+                  {{ project.description }}
+                } @else {
+                  <span class="data-table__muted">No description</span>
+                }
+              </td>
+              <td>{{ project.startDate | date:'mediumDate' }}</td>
+              <td>
+                @if (project.endDate) {
+                  <span [class.data-table__date--overdue]="isPastEndDate(project.endDate)">
+                    {{ project.endDate | date:'mediumDate' }}
+                  </span>
+                } @else {
+                  <span class="data-table__muted">No end date</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
