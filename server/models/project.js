@@ -1,3 +1,8 @@
+/**
+ * Sprint 3 — Project model
+ * Maps to the existing MongoDB Atlas `projects` collection in `task_management_system`.
+ * Defines the Mongoose schema used by the Project API.
+ */
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema(

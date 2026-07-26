@@ -1,3 +1,8 @@
+/**
+ * Sprint 3 — Project domain types.
+ * Aligned with the Atlas `projects` collection.
+ */
+
 /** Project document shape returned by the API */
 export interface Project {
   _id?: string;
@@ -22,4 +27,10 @@ export interface CreateProjectRequest {
 export interface CreateProjectResponse {
   message: string;
   project: Project;
+}
+
+/** Standard success response from the List All Projects API */
+export interface GetProjectsResponse {
+  message: string;
+  projects: Project[];
 }

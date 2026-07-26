@@ -5,6 +5,7 @@
  * Update Task is available at /tasks/:taskId/edit.
  * List All Tasks is available at /tasks.
  * Create Project is available at /projects/create.
+ * List All Projects is available at /projects.
  */
 import { Routes } from '@angular/router';
 import { TaskCreateComponent } from './task-create/task-create.component';
@@ -14,10 +15,12 @@ import { TaskDeleteComponent } from './task-delete/task-delete.component';
 import { TaskSearchComponent } from './task-search/task-search.component';
 import { TaskUpdateComponent } from './task-update/task-update.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
+import { ProjectListComponent } from './project-list/project-list.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'tasks' },
   { path: 'projects/create', component: ProjectCreateComponent },
+  { path: 'projects', component: ProjectListComponent },
   { path: 'tasks/create', component: TaskCreateComponent },
   { path: 'tasks/search', component: TaskSearchComponent },
   { path: 'tasks', component: TaskListComponent },

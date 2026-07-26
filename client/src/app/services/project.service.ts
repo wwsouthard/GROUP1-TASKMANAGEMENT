@@ -1,8 +1,16 @@
+/**
+ * Sprint 3 — Project API service.
+ * Uses the configured environment apiBaseUrl for all HTTP calls.
+ */
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CreateProjectRequest, CreateProjectResponse } from '../models/project';
+import {
+  CreateProjectRequest,
+  CreateProjectResponse,
+  GetProjectsResponse
+} from '../models/project';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +22,10 @@ export class ProjectService {
   /** Create a new project via POST /api/projects */
   createProject(payload: CreateProjectRequest): Observable<CreateProjectResponse> {
     return this.http.post<CreateProjectResponse>(`${this.apiBaseUrl}/api/projects`, payload);
+  }
+
+  /** List all projects via GET /api/projects */
+  getProjects(): Observable<GetProjectsResponse> {
+    return this.http.get<GetProjectsResponse>(`${this.apiBaseUrl}/api/projects`);
   }
 }

@@ -1,3 +1,7 @@
+/**
+ * Sprint 3 — Project service
+ * Contains project-related database operations.
+ */
 const Project = require('../models/project');
 const Counter = require('../models/counter');
 
@@ -75,6 +79,14 @@ function validateCreateProjectInput(payload = {}) {
   }
 }
 
+/**
+ * List all project documents.
+ * Sorts newest modified projects first so the UI is consistent.
+ */
+async function listProjects() {
+  return Project.find({}).sort({ dateModified: -1 });
+}
+
 async function createProject(payload) {
   validateCreateProjectInput(payload);
 
@@ -124,4 +136,8 @@ async function createProject(payload) {
   }
 }
 
-module.exports = { createProject, validateCreateProjectInput };
+module.exports = {
+  listProjects,
+  createProject,
+  validateCreateProjectInput
+};

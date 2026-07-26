@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 // Sprint 1: Create Task route module (POST /api/tasks)
 const taskRoutes = require('./routes/task');
-// Sprint 3: Create Project route module (POST /api/projects)
+// Sprint 3: Project route module (/api/projects)
 const projectRoutes = require('./routes/project');
 
 const app = express();
