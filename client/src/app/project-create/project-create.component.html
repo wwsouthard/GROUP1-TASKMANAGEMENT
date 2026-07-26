@@ -1,0 +1,84 @@
+<section class="page page--narrow" aria-labelledby="create-project-heading">
+  <h1 id="create-project-heading">Create Project</h1>
+  <p class="page__intro">
+    Add a new project with a unique name and a start date.
+  </p>
+
+  @if (successMessage) {
+    <p class="alert alert--success" role="status">
+      {{ successMessage }}
+    </p>
+  }
+
+  @if (errorMessage) {
+    <p class="alert alert--error" role="alert">
+      {{ errorMessage }}
+    </p>
+  }
+
+  <form class="form" [formGroup]="projectForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
+      <label for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        autocomplete="off"
+        [attr.aria-invalid]="name.invalid && name.touched"
+        [attr.aria-describedby]="name.invalid && name.touched ? 'name-error' : null"
+      />
+      @if (name.invalid && name.touched) {
+        <p id="name-error" class="field__error">Name is required.</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <div class="form__row">
+      <div class="field">
+        <label for="startDate">Start date</label>
+        <input
+          id="startDate"
+          type="date"
+          formControlName="startDate"
+          [attr.aria-invalid]="startDate.invalid && startDate.touched"
+          [attr.aria-describedby]="startDate.invalid && startDate.touched ? 'startDate-error' : null"
+        />
+        @if (startDate.invalid && startDate.touched) {
+          <p id="startDate-error" class="field__error">Start date is required.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="endDate">End date <span class="field__optional">(optional)</span></label>
+        <input
+          id="endDate"
+          type="date"
+          formControlName="endDate"
+          [attr.aria-invalid]="endDateError"
+          [attr.aria-describedby]="endDateError ? 'endDate-error' : null"
+        />
+        @if (endDateError) {
+          <p id="endDate-error" class="field__error">End date must be later than start date.</p>
+        }
+      </div>
+    </div>
+
+    <div class="page__actions">
+      <button
+        type="submit"
+        class="btn btn--primary"
+        [disabled]="projectForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'Creating…' : 'Create Project' }}
+      </button>
+    </div>
+  </form>
+</section>

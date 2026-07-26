@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 // Sprint 1: Create Task route module (POST /api/tasks)
 const taskRoutes = require('./routes/task');
+// Sprint 3: Create Project route module (POST /api/projects)
+const projectRoutes = require('./routes/project');
 
 const app = express();
 
@@ -17,5 +19,7 @@ app.get('/api/health', (req, res) => {
 
 // Sprint 1: mount create-task (and future task) endpoints under /api/tasks
 app.use('/api/tasks', taskRoutes);
+// Sprint 3: mount project endpoints under /api/projects
+app.use('/api/projects', projectRoutes);
 
 module.exports = app;

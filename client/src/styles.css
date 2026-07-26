@@ -593,6 +593,12 @@ h1,
   line-height: 1.55;
 }
 
+.field__optional {
+  color: var(--color-text-subtle);
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
 /* —— Delete warning panel —— */
 
 .warning-panel {
