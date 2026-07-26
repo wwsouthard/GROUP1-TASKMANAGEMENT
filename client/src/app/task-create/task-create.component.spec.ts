@@ -92,9 +92,12 @@ describe('TaskCreateComponent', () => {
       dueDate: '2026-07-20',
       projectId: 1000
     });
-    expect(component.successMessage).toBe('Task created successfully');
+    expect(component.createdTaskId).toBe(123);
+    expect(component.successMessage).toBe(
+      'Task created successfully. Task ID: 123'
+    );
     expect(component.errorMessage).toBeNull();
     expect(component.isSubmitting).toBeFalse();
-    expect(navigateSpy).toHaveBeenCalledWith(['/tasks']);
+    expect(navigateSpy).toHaveBeenCalledWith(['/tasks', 123]);
   });
 });

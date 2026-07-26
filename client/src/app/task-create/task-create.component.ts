@@ -10,7 +10,7 @@ import {
   Validators
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import {
   CreateTaskRequest,
@@ -23,7 +23,7 @@ import {
 @Component({
   selector: 'app-task-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './task-create.component.html',
   styleUrl: './task-create.component.css'
 })
@@ -42,6 +42,9 @@ export class TaskCreateComponent {
   /** User-facing feedback after submit */
   successMessage: string | null = null;
   errorMessage: string | null = null;
+
+  /** Server-assigned taskId from the create response (shown after success) */
+  createdTaskId: number | null = null;
 
   /**
    * Create Task form.
@@ -80,6 +83,7 @@ export class TaskCreateComponent {
   onSubmit(): void {
     this.successMessage = null;
     this.errorMessage = null;
+    this.createdTaskId = null;
 
     if (this.taskForm.invalid || this.isSubmitting) {
       this.taskForm.markAllAsTouched();
@@ -92,12 +96,25 @@ export class TaskCreateComponent {
     this.taskService.createTask(payload).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        this.successMessage = response.message || 'Task created successfully';
         this.errorMessage = null;
-        void this.router.navigate(['/tasks']);
+
+        const taskId = response.task?.taskId;
+        this.createdTaskId =
+          typeof taskId === 'number' && !Number.isNaN(taskId) ? taskId : null;
+
+        // Expose the server-assigned taskId so reviewers can confirm create → read-by-id.
+        this.successMessage =
+          this.createdTaskId != null
+            ? `Task created successfully. Task ID: ${this.createdTaskId}`
+            : response.message || 'Task created successfully';
+
+        if (this.createdTaskId != null) {
+          void this.router.navigate(['/tasks', this.createdTaskId]);
+        }
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
+        this.createdTaskId = null;
         this.errorMessage = this.getErrorMessage(error);
       }
     });

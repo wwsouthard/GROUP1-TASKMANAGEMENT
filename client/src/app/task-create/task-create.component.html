@@ -6,9 +6,16 @@
   </p>
 
   @if (successMessage) {
-    <p class="alert alert--success" role="status">
-      {{ successMessage }}
-    </p>
+    <div class="alert alert--success" role="status">
+      <p>{{ successMessage }}</p>
+      @if (createdTaskId != null) {
+        <p>
+          <a class="data-table__link" [routerLink]="['/tasks', createdTaskId]">
+            View task {{ createdTaskId }}
+          </a>
+        </p>
+      }
+    </div>
   }
 
   @if (errorMessage) {
