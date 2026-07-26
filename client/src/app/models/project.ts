@@ -34,3 +34,9 @@ export interface GetProjectsResponse {
   message: string;
   projects: Project[];
 }
+
+/** Standard success response from the Get Project By Id API */
+export interface GetProjectByIdResponse {
+  message: string;
+  project: Project | null;
+}

@@ -13,4 +13,7 @@ router.get('/', projectController.getProjects);
 // Create Project API — POST /api/projects
 router.post('/', projectController.createProject);
 
+// Read Project By projectId — GET /api/projects/:projectId
+router.get('/:projectId', projectController.getProjectById);
+
 module.exports = router;

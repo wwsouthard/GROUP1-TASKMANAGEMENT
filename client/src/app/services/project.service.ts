@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 import {
   CreateProjectRequest,
   CreateProjectResponse,
+  GetProjectByIdResponse,
   GetProjectsResponse
 } from '../models/project';
 
@@ -27,5 +28,10 @@ export class ProjectService {
   /** List all projects via GET /api/projects */
   getProjects(): Observable<GetProjectsResponse> {
     return this.http.get<GetProjectsResponse>(`${this.apiBaseUrl}/api/projects`);
+  }
+
+  /** Get a project by its projectId via GET /api/projects/:projectId */
+  getProjectById(projectId: number): Observable<GetProjectByIdResponse> {
+    return this.http.get<GetProjectByIdResponse>(`${this.apiBaseUrl}/api/projects/${projectId}`);
   }
 }

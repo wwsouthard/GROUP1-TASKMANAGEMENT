@@ -87,6 +87,11 @@ async function listProjects() {
   return Project.find({}).sort({ dateModified: -1 });
 }
 
+/** Retrieve a specific project by its projectId */
+async function getProject(projectId) {
+  return await Project.findOne({ projectId });
+}
+
 async function createProject(payload) {
   validateCreateProjectInput(payload);
 
@@ -138,6 +143,7 @@ async function createProject(payload) {
 
 module.exports = {
   listProjects,
+  getProject,
   createProject,
   validateCreateProjectInput
 };

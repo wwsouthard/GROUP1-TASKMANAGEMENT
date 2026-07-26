@@ -1,51 +1,53 @@
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Component, OnInit, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Project } from '../models/project';
 import { ProjectService } from '../services/project.service';
 
 @Component({
-  selector: 'app-project-list',
+  selector: 'app-project-details',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './project-list.component.html',
-  styleUrl: './project-list.component.css'
+  templateUrl: './project-details.component.html',
+  styleUrl: './project-details.component.css'
 })
-export class ProjectListComponent implements OnInit {
+export class ProjectDetailsComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
+  private route = inject(ActivatedRoute);
 
-  projects: Project[] = [];
+  project?: Project;
   isLoading = false;
   errorMessage = '';
 
   ngOnInit(): void {
-    this.loadProjects();
-  }
+    const projectId = Number(this.route.snapshot.paramMap.get('projectId'));
 
-  loadProjects(): void {
+    if(Number.isNaN(projectId)) {
+      this.errorMessage = 'Invalid project ID';
+      return;
+    }
+
     this.isLoading = true;
-    this.errorMessage = '';
 
-    this.projectService.getProjects().subscribe({
+    this.projectService.getProjectById(projectId).subscribe({
       next: (response) => {
-        this.projects = response.projects;
+        this.project = response.project ?? undefined;
         this.isLoading = false;
       },
       error: () => {
-        this.errorMessage = 'Unable to load projects';
-        this.projects = [];
+        this.errorMessage = 'Failed to load project.';
         this.isLoading = false;
       }
     });
   }
 
-  isPastEndDate(endDate: string | Date | null | undefined): boolean {
-    if (!endDate) {
+  isOverdue(endDate: string | Date | null | undefined): boolean {
+    if(!endDate) {
       return false;
     }
 
     const date = new Date(endDate);
-    if (Number.isNaN(date.getTime())) {
+    if(Number.isNaN(date.getTime())) {
       return false;
     }
 

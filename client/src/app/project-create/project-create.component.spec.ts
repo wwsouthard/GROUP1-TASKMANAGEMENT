@@ -164,7 +164,7 @@ describe('ProjectCreateComponent', () => {
     expect(component.successMessage).toBe('Project created successfully');
     expect(component.errorMessage).toBeNull();
     expect(component.isSubmitting).toBeFalse();
-    expect(navigateSpy).toHaveBeenCalledWith(['/tasks']);
+    expect(navigateSpy).toHaveBeenCalledWith(['/projects']);
   });
 
   // Test 7: service error is handled without crashing the component

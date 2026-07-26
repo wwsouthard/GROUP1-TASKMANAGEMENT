@@ -1,0 +1,52 @@
+<section class="page page--narrow" aria-labelledby="project-details-heading">
+  <p class="page__nav">
+    <a routerLink="/projects">← Back to projects</a>
+  </p>
+
+  @if (isLoading) {
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__line skeleton__line--title"></div>
+      <div class="skeleton__line"></div>
+      <div class="skeleton__line skeleton__line--short"></div>
+      <div class="skeleton__row"></div>
+      <div class="skeleton__row"></div>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <p class="alert alert--error" role="alert">{{ errorMessage }}</p>
+  }
+
+  @if (project) {
+    <h1 id="project-details-heading">{{ project.name }}</h1>
+
+    @if (project.description) {
+      <div class="description-block">{{ project.description }}</div>
+    }
+
+    <dl class="meta-list meta-list--grid">
+      <div class="meta-list__row">
+        <dt class="meta-list__label">End Date</dt>
+        <dd class="meta-list__value">
+          @if (project.endDate) {
+            <span [class.data-table__date--overdue]="isOverdue(project.endDate)">
+              {{ project.endDate | date:'longDate' }}
+            </span>
+          } @else {
+            No end date
+          }
+        </dd>
+      </div>
+      <div class="meta-list__row">
+        <dt class="meta-list__label">Project ID</dt>
+        <dd class="meta-list__value">{{ project.projectId }}</dd>
+      </div>
+    </dl>
+
+    @if (project.projectId != null) {
+      <div class="page__actions page__actions--sticky">
+        <a class="btn btn--secondary" [routerLink]="['/projects']">Back to projects</a>
+      </div>
+    }
+  }
+</section>
