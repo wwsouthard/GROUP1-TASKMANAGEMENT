@@ -5,9 +5,16 @@
   </p>
 
   @if (successMessage) {
-    <p class="alert alert--success" role="status">
-      {{ successMessage }}
-    </p>
+    <div class="alert alert--success" role="status">
+      <p>{{ successMessage }}</p>
+      @if (createdProjectId != null) {
+        <p>
+          <a class="data-table__link" [routerLink]="['/projects', createdProjectId]">
+            View project {{ createdProjectId }}
+          </a>
+        </p>
+      }
+    </div>
   }
 
   @if (errorMessage) {

@@ -8,7 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProjectService } from '../services/project.service';
 import { CreateProjectRequest } from '../models/project';
 
@@ -27,7 +27,7 @@ function endDateAfterStartDate(group: AbstractControl): ValidationErrors | null 
 @Component({
   selector: 'app-project-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './project-create.component.html',
   styleUrl: './project-create.component.css'
 })
@@ -39,6 +39,9 @@ export class ProjectCreateComponent {
   isSubmitting = false;
   successMessage: string | null = null;
   errorMessage: string | null = null;
+
+  /** Server-assigned projectId from the create response (shown after success) */
+  createdProjectId: number | null = null;
 
   readonly projectForm = this.formBuilder.nonNullable.group(
     {
@@ -73,6 +76,7 @@ export class ProjectCreateComponent {
   onSubmit(): void {
     this.successMessage = null;
     this.errorMessage = null;
+    this.createdProjectId = null;
 
     if (this.projectForm.invalid || this.isSubmitting) {
       this.projectForm.markAllAsTouched();
@@ -85,12 +89,26 @@ export class ProjectCreateComponent {
     this.projectService.createProject(payload).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        this.successMessage = response.message || 'Project created successfully';
         this.errorMessage = null;
-        void this.router.navigate(['/projects']);
+
+        const projectId = response.project?.projectId;
+        this.createdProjectId =
+          typeof projectId === 'number' && !Number.isNaN(projectId) ? projectId : null;
+
+        this.successMessage =
+          this.createdProjectId != null
+            ? `Project created successfully. Project ID: ${this.createdProjectId}`
+            : response.message || 'Project created successfully';
+
+        if (this.createdProjectId != null) {
+          void this.router.navigate(['/projects', this.createdProjectId]);
+        } else {
+          void this.router.navigate(['/projects']);
+        }
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
+        this.createdProjectId = null;
         this.errorMessage = this.getErrorMessage(error);
       }
     });

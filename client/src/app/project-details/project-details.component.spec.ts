@@ -101,4 +101,27 @@ describe('ProjectDetailsComponent', () => {
     expect(component.project)
       .toBeUndefined();
   });
+
+  it('should show project not found when the API returns a null project', () => {
+    projectServiceMock.getProjectById.and.returnValue(
+      of({
+        message: 'Project retrieved successfully',
+        project: null
+      })
+    );
+
+    fixture.detectChanges();
+
+    expect(projectServiceMock.getProjectById)
+      .toHaveBeenCalledWith(223);
+
+    expect(component.project)
+      .toBeUndefined();
+
+    expect(component.errorMessage)
+      .toBe('Project not found.');
+
+    expect(component.isLoading)
+      .toBeFalse();
+  });
 });

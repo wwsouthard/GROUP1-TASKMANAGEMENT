@@ -139,8 +139,8 @@ describe('ProjectCreateComponent', () => {
     expect(component.startDate.touched).toBeTrue();
   });
 
-  // Test 6: successful service response updates the component appropriately
-  it('should set successMessage, clear errorMessage, and navigate to /projects on success', () => {
+  // Test 6: successful service response exposes projectId and opens project details
+  it('should set successMessage with projectId and navigate to project details on success', () => {
     const apiResponse: CreateProjectResponse = {
       message: 'Project created successfully',
       project: {
@@ -161,10 +161,13 @@ describe('ProjectCreateComponent', () => {
 
     component.onSubmit();
 
-    expect(component.successMessage).toBe('Project created successfully');
+    expect(component.createdProjectId).toBe(2);
+    expect(component.successMessage).toBe(
+      'Project created successfully. Project ID: 2'
+    );
     expect(component.errorMessage).toBeNull();
     expect(component.isSubmitting).toBeFalse();
-    expect(navigateSpy).toHaveBeenCalledWith(['/projects']);
+    expect(navigateSpy).toHaveBeenCalledWith(['/projects', 2]);
   });
 
   // Test 7: service error is handled without crashing the component

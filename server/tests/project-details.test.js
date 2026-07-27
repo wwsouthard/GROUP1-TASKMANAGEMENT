@@ -40,7 +40,7 @@ describe('GET /api/projects/:projectId', () => {
       .toHaveBeenCalledWith(223);
   });
 
-  it('should return 404 when project is not found', async () => {
+  it('should return 200 with project null when project is not found', async () => {
     projectService.getProject.mockResolvedValue(null);
 
     const response = await request(app)

@@ -33,6 +33,9 @@ export class ProjectDetailsComponent implements OnInit {
       next: (response) => {
         this.project = response.project ?? undefined;
         this.isLoading = false;
+        if (!this.project) {
+          this.errorMessage = 'Project not found.';
+        }
       },
       error: () => {
         this.errorMessage = 'Failed to load project.';
