@@ -1,0 +1,5 @@
+/* Update Project — page uses shared global utilities */
+
+:host {
+  display: block;
+}

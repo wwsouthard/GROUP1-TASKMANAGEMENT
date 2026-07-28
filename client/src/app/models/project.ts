@@ -23,8 +23,22 @@ export interface CreateProjectRequest {
   endDate?: string | null;
 }
 
+/** Request body for PUT /api/projects/:projectId (editable fields only; projectId is in the URL) */
+export interface UpdateProjectRequest {
+  name: string;
+  description?: string | null;
+  startDate: string;
+  endDate?: string | null;
+}
+
 /** Standard success response from the Create Project API */
 export interface CreateProjectResponse {
+  message: string;
+  project: Project;
+}
+
+/** Standard success response from the Update Project API */
+export interface UpdateProjectResponse {
   message: string;
   project: Project;
 }

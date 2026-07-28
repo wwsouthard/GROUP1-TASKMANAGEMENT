@@ -5,6 +5,7 @@
  * Update Task is available at /tasks/:taskId/edit.
  * List All Tasks is available at /tasks.
  * Create Project is available at /projects/create.
+ * Update Project is available at /projects/:projectId/edit.
  * List All Projects is available at /projects.
  * Read Project is available at /projects/:projectId.
  */
@@ -18,10 +19,12 @@ import { TaskUpdateComponent } from './task-update/task-update.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
+import { ProjectUpdateComponent } from './project-update/project-update.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'tasks' },
   { path: 'projects/create', component: ProjectCreateComponent },
+  { path: 'projects/:projectId/edit', component: ProjectUpdateComponent },
   { path: 'projects', component: ProjectListComponent },
   { path: 'projects/:projectId', component: ProjectDetailsComponent },
   { path: 'tasks/create', component: TaskCreateComponent },

@@ -45,6 +45,7 @@
 
     @if (project.projectId != null) {
       <div class="page__actions page__actions--sticky">
+        <a class="btn btn--secondary" [routerLink]="['/projects', project.projectId, 'edit']">Edit Project</a>
         <a class="btn btn--secondary" [routerLink]="['/projects']">Back to projects</a>
       </div>
     }

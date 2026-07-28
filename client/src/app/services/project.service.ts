@@ -10,7 +10,9 @@ import {
   CreateProjectRequest,
   CreateProjectResponse,
   GetProjectByIdResponse,
-  GetProjectsResponse
+  GetProjectsResponse,
+  UpdateProjectRequest,
+  UpdateProjectResponse
 } from '../models/project';
 
 @Injectable({
@@ -33,5 +35,10 @@ export class ProjectService {
   /** Get a project by its projectId via GET /api/projects/:projectId */
   getProjectById(projectId: number): Observable<GetProjectByIdResponse> {
     return this.http.get<GetProjectByIdResponse>(`${this.apiBaseUrl}/api/projects/${projectId}`);
+  }
+
+  /** Update an existing project via PUT /api/projects/:projectId */
+  updateProject(projectId: number, payload: UpdateProjectRequest): Observable<UpdateProjectResponse> {
+    return this.http.put<UpdateProjectResponse>(`${this.apiBaseUrl}/api/projects/${projectId}`, payload);
   }
 }
