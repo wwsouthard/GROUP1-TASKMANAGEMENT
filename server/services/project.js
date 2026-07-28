@@ -19,6 +19,13 @@ function buildConflictError(message) {
   return error;
 }
 
+function buildNotFoundError(message) {
+  const error = new Error(message);
+  error.name = 'ProjectNotFoundError';
+  error.statusCode = 404;
+  return error;
+}
+
 async function getNextProjectId() {
   let floor = 0;
 
@@ -141,9 +148,65 @@ async function createProject(payload) {
   }
 }
 
+/**
+ * Update an existing project document by numeric projectId.
+ * Applies only editable fields, refreshes dateModified, and enforces unique name
+ * while excluding the project being updated. Does not change _id, projectId, or dateCreated.
+ */
+async function updateProject(projectId, payload) {
+  validateCreateProjectInput(payload);
+
+  const project = await Project.findOne({ projectId });
+
+  if (!project) {
+    throw buildNotFoundError('Project not found');
+  }
+
+  const name = String(payload.name).trim();
+
+  const duplicateName = await Project.findOne({ name, projectId: { $ne: projectId } });
+
+  if (duplicateName) {
+    throw buildConflictError('A project with this name already exists');
+  }
+
+  const description =
+    payload.description === undefined || payload.description === null || payload.description === ''
+      ? null
+      : payload.description;
+  const endDate =
+    payload.endDate === undefined || payload.endDate === null || payload.endDate === ''
+      ? null
+      : payload.endDate;
+
+  project.name = name;
+  project.description = description;
+  project.startDate = payload.startDate;
+  project.endDate = endDate;
+  project.dateModified = new Date();
+
+  try {
+    return await project.save();
+  } catch (error) {
+    if (error && error.code === 11000) {
+      throw buildConflictError('A project with this name already exists');
+    }
+
+    if (error.name === 'ValidationError' || error.name === 'CastError') {
+      const firstMessage = Object.values(error.errors || {})
+        .map((err) => err.message)
+        .filter(Boolean)[0];
+      throw buildValidationError(firstMessage || error.message || 'Invalid project data');
+    }
+
+    throw error;
+  }
+}
+
 module.exports = {
   listProjects,
   getProject,
   createProject,
+  updateProject,
   validateCreateProjectInput
 };

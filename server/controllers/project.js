@@ -85,4 +85,41 @@ async function createProject(req, res) {
   }
 }
 
-module.exports = { getProjects, getProjectById, createProject };
+/**
+ * PUT /api/projects/:projectId
+ * Success: 200 { message, project }
+ * Client errors: 400 / 404 / 409 { message }
+ * Server errors: 500 { message }
+ */
+async function updateProject(req, res) {
+  try {
+    const projectId = Number(req.params.projectId);
+
+    if (Number.isNaN(projectId)) {
+      return res.status(400).json({
+        message: 'Invalid project ID'
+      });
+    }
+
+    const project = await projectService.updateProject(projectId, req.body);
+
+    return res.status(200).json({
+      message: 'Project updated successfully',
+      project
+    });
+  } catch (error) {
+    if (error.statusCode === 400 || error.statusCode === 404 || error.statusCode === 409) {
+      return res.status(error.statusCode).json({
+        message: error.message
+      });
+    }
+
+    console.error('Error updating project:', error.message);
+
+    return res.status(500).json({
+      message: 'Unable to update project'
+    });
+  }
+}
+
+module.exports = { getProjects, getProjectById, createProject, updateProject };
