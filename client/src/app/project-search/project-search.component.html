@@ -1,0 +1,67 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <p class="eyebrow">Projects</p>
+      <h1>Search Projects</h1>
+      <p>Search projects by name, description, or project ID.</p>
+    </div>
+
+    <a routerLink="/projects" class="button button--secondary">View All Projects</a>
+  </header>
+
+  <form class="search-form" (ngSubmit)="searchProjects()">
+    <label for="projectSearch">Search projects</label>
+
+    <div class="search-form__row">
+      <input
+        id="projectSearch"
+        name="projectSearch"
+        type="search"
+        [(ngModel)]="searchQuery"
+        placeholder="Example: Website, launch, 1000"
+      />
+
+      <button type="submit" class="button" [disabled]="isLoading">
+        {{ isLoading ? 'Searching...' : 'Search' }}
+      </button>
+
+      <button type="button" class="button button--secondary" (click)="clearSearch()">
+        Clear
+      </button>
+    </div>
+  </form>
+
+  <p *ngIf="errorMessage" class="alert alert--error">{{ errorMessage }}</p>
+
+  <div *ngIf="!isLoading && hasSearched && projects.length === 0 && !errorMessage" class="empty-state">
+    No projects matched your search.
+  </div>
+
+  <div *ngIf="projects.length > 0" class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let project of projects">
+          <td>{{ project.projectId }}</td>
+          <td>{{ project.name }}</td>
+          <td>{{ project.description || 'No description' }}</td>
+          <td>{{ project.startDate | date: 'mediumDate' }}</td>
+          <td>{{ project.endDate ? (project.endDate | date: 'mediumDate') : 'No end date' }}</td>
+          <td>
+            <a [routerLink]="['/projects', project.projectId]">View</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,5 +1,5 @@
 /**
- * Sprint 3 — Project service
+ * Sprint 4 — Project service
  * Contains project-related database operations.
  */
 const Project = require('../models/project');
@@ -17,6 +17,10 @@ function buildConflictError(message) {
   error.name = 'ProjectConflictError';
   error.statusCode = 409;
   return error;
+}
+
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 async function getNextProjectId() {
@@ -87,6 +91,30 @@ async function listProjects() {
   return Project.find({}).sort({ dateModified: -1 });
 }
 
+/**
+ * Search project documents by name, description, or projectId.
+ */
+async function searchProjects(query = '') {
+  const trimmedQuery = String(query || '').trim();
+
+  if (!trimmedQuery) {
+    return [];
+  }
+
+  const regex = new RegExp(escapeRegex(trimmedQuery), 'i');
+  const searchConditions = [
+    { name: regex },
+    { description: regex }
+  ];
+
+  const numericQuery = Number(trimmedQuery);
+  if (!Number.isNaN(numericQuery)) {
+    searchConditions.push({ projectId: numericQuery });
+  }
+
+  return Project.find({ $or: searchConditions }).sort({ dateModified: -1 });
+}
+
 /** Retrieve a specific project by its projectId */
 async function getProject(projectId) {
   return await Project.findOne({ projectId });
@@ -143,6 +171,7 @@ async function createProject(payload) {
 
 module.exports = {
   listProjects,
+  searchProjects,
   getProject,
   createProject,
   validateCreateProjectInput
