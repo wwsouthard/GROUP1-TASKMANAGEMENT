@@ -3,6 +3,6 @@
  * apiBaseUrl is used by HTTP services; do not hardcode URLs in components.
  */
 export const environment = {
-  production: false,
-  apiBaseUrl: 'http://localhost:3000'
+  production: true,
+  apiBaseUrl: 'https://group1-taskmanagement.onrender.com/'
 };
