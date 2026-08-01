@@ -80,6 +80,13 @@ function validateCreateProjectInput(payload = {}) {
 }
 
 /**
+ * Delete a specific project by its projectId
+ */
+async function deleteProject(projectId) {
+  return await Project.findOneAndDelete({ projectId });
+}
+
+/**
  * List all project documents.
  * Sorts newest modified projects first so the UI is consistent.
  */
@@ -145,5 +152,6 @@ module.exports = {
   listProjects,
   getProject,
   createProject,
-  validateCreateProjectInput
+  validateCreateProjectInput,
+  deleteProject
 };

@@ -46,6 +46,7 @@
     @if (project.projectId != null) {
       <div class="page__actions page__actions--sticky">
         <a class="btn btn--secondary" [routerLink]="['/projects']">Back to projects</a>
+        <a class="btn btn--danger" [routerLink]="['/projects', project.projectId, 'delete']">Delete Project</a>
       </div>
     }
   }

@@ -18,11 +18,13 @@ import { TaskUpdateComponent } from './task-update/task-update.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
+import { ProjectDeleteComponent } from './project-delete/project-delete.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'tasks' },
   { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'projects', component: ProjectListComponent },
+  { path: 'projects/:projectId/delete', component: ProjectDeleteComponent },
   { path: 'projects/:projectId', component: ProjectDetailsComponent },
   { path: 'tasks/create', component: TaskCreateComponent },
   { path: 'tasks/search', component: TaskSearchComponent },

@@ -10,7 +10,8 @@ import {
   CreateProjectRequest,
   CreateProjectResponse,
   GetProjectByIdResponse,
-  GetProjectsResponse
+  GetProjectsResponse,
+  DeleteProjectResponse
 } from '../models/project';
 
 @Injectable({
@@ -34,4 +35,9 @@ export class ProjectService {
   getProjectById(projectId: number): Observable<GetProjectByIdResponse> {
     return this.http.get<GetProjectByIdResponse>(`${this.apiBaseUrl}/api/projects/${projectId}`);
   }
+
+  /** Delete a project via DELETE /api/projects/:projectId */
+    deleteProject(projectId: number): Observable<DeleteProjectResponse> {
+      return this.http.delete<DeleteProjectResponse>(`${this.apiBaseUrl}/api/projects/${projectId}`);
+    }
 }
