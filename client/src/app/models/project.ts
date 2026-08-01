@@ -54,3 +54,8 @@ export interface GetProjectByIdResponse {
   message: string;
   project: Project | null;
 }
+
+/** Standard success response from the Delete Project API */
+export interface DeleteProjectResponse {
+  message: string;
+}

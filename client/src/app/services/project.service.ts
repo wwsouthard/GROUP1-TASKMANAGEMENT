@@ -12,7 +12,8 @@ import {
   GetProjectByIdResponse,
   GetProjectsResponse,
   UpdateProjectRequest,
-  UpdateProjectResponse
+  UpdateProjectResponse,
+  DeleteProjectResponse
 } from '../models/project';
 
 @Injectable({
@@ -46,5 +47,10 @@ export class ProjectService {
   /** Update an existing project via PUT /api/projects/:projectId */
   updateProject(projectId: number, payload: UpdateProjectRequest): Observable<UpdateProjectResponse> {
     return this.http.put<UpdateProjectResponse>(`${this.apiBaseUrl}/api/projects/${projectId}`, payload);
+  }
+
+  /** Delete a project via DELETE /api/projects/:projectId */
+  deleteProject(projectId: number): Observable<DeleteProjectResponse> {
+    return this.http.delete<DeleteProjectResponse>(`${this.apiBaseUrl}/api/projects/${projectId}`);
   }
 }

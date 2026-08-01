@@ -6,6 +6,7 @@
  * List All Tasks is available at /tasks.
  * Create Project is available at /projects/create.
  * Update Project is available at /projects/:projectId/edit.
+ * Delete Project is available at /projects/:projectId/delete.
  * Search Projects is available at /projects/search.
  * List All Projects is available at /projects.
  * Read Project is available at /projects/:projectId.
@@ -22,6 +23,7 @@ import { ProjectSearchComponent } from './project-search/project-search.componen
 import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { ProjectUpdateComponent } from './project-update/project-update.component';
+import { ProjectDeleteComponent } from './project-delete/project-delete.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'tasks' },
@@ -29,6 +31,7 @@ export const routes: Routes = [
   { path: 'projects/:projectId/edit', component: ProjectUpdateComponent },
   { path: 'projects/search', component: ProjectSearchComponent },
   { path: 'projects', component: ProjectListComponent },
+  { path: 'projects/:projectId/delete', component: ProjectDeleteComponent },
   { path: 'projects/:projectId', component: ProjectDetailsComponent },
   { path: 'tasks/create', component: TaskCreateComponent },
   { path: 'tasks/search', component: TaskSearchComponent },

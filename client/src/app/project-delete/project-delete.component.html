@@ -1,0 +1,61 @@
+<section class="page page--narrow" aria-labelledby="delete-project-heading">
+  <p class="page__nav">
+    @if (hasValidProjectId) {
+      <a [routerLink]="['/projects', projectId]">← Back to project</a>
+    } @else {
+      <a routerLink="/projects">← Back to projects</a>
+    }
+  </p>
+
+  <h1 id="delete-project-heading">Delete Project</h1>
+  <p class="page__intro">
+    Are you sure you want to delete this project? This action cannot be undone.
+  </p>
+
+  @if (isLoading) {
+    <div class="skeleton" aria-busy="true" aria-live="polite">
+      <div class="skeleton__line skeleton__line--title"></div>
+      <div class="skeleton__row"></div>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <p class="alert alert--error" role="alert">{{ errorMessage }}</p>
+  }
+
+  @if (project) {
+    <div class="warning-panel">
+      <p class="warning-panel__title">You are about to permanently remove:</p>
+
+      <dl class="meta-list">
+        <div class="meta-list__row">
+          <dt class="meta-list__label">Project Name</dt>
+          <dd class="meta-list__value">{{ project.name }}</dd>
+        </div>
+        <div class="meta-list__row">
+          <dt class="meta-list__label">Project ID</dt>
+          <dd class="meta-list__value">{{ project.projectId }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="page__actions">
+      <button
+        type="button"
+        class="btn btn--danger"
+        (click)="deleteProject()"
+        [disabled]="isDeleting"
+      >
+        {{ isDeleting ? 'Deleting…' : 'Yes, Delete Project' }}
+      </button>
+      <button
+        type="button"
+        class="btn btn--secondary"
+        (click)="cancel()"
+        [disabled]="isDeleting"
+      >
+        Cancel
+      </button>
+    </div>
+  }
+</section>
