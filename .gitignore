@@ -9,7 +9,6 @@ server/node_modules/
 client/.env
 
 # Build outputs
-dist/
 client/dist/
 server/dist/
 

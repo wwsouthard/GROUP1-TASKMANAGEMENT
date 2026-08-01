@@ -1,18 +1,15 @@
-<section class="page">
-  <header class="page__header">
-    <div>
-      <p class="eyebrow">Projects</p>
-      <h1>Search Projects</h1>
-      <p>Search projects by name, description, or project ID.</p>
-    </div>
+<section class="page page--wide" aria-labelledby="search-projects-heading">
+  <p class="page__nav">
+    <a routerLink="/projects">← Back to projects</a>
+  </p>
 
-    <a routerLink="/projects" class="button button--secondary">View All Projects</a>
-  </header>
+  <h1 id="search-projects-heading">Search Projects</h1>
+  <p class="page__intro">Search projects by name, description, or project ID.</p>
 
-  <form class="search-form" (ngSubmit)="searchProjects()">
+  <form class="form" (ngSubmit)="searchProjects()">
     <label for="projectSearch">Search projects</label>
 
-    <div class="search-form__row">
+    <div class="field-inline">
       <input
         id="projectSearch"
         name="projectSearch"
@@ -21,11 +18,11 @@
         placeholder="Example: Website, launch, 1000"
       />
 
-      <button type="submit" class="button" [disabled]="isLoading">
+      <button type="submit" class="btn btn--primary" [disabled]="isLoading">
         {{ isLoading ? 'Searching...' : 'Search' }}
       </button>
 
-      <button type="button" class="button button--secondary" (click)="clearSearch()">
+      <button type="button" class="btn btn--secondary" (click)="clearSearch()">
         Clear
       </button>
     </div>
