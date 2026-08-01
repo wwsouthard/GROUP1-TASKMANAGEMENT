@@ -4,5 +4,5 @@
  */
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://group1-taskmanagement.onrender.com/'
+  apiBaseUrl: 'https://group1-taskmanagement.onrender.com'
 };
