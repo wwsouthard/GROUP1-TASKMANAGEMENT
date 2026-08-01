@@ -10,7 +10,7 @@ Task Management App built for WEB450 (MEAN stack).
 
 ## Overview
 
-Sprint 1 covers **create**, **list**, and **read** for tasks. Sprint 2 adds **update**, **delete**, and **search**, plus **server-generated numeric `taskId`** values via a MongoDB counter. Sprint 3 adds **create**, **list**, and **read** for projects (server-generated numeric `projectId`), with Angular routes for create, list, and details.
+Sprint 1 covers **create**, **list**, and **read** for tasks. Sprint 2 adds **update**, **delete**, and **search**, plus **server-generated numeric `taskId`** values via a MongoDB counter. Sprint 3 adds **create**, **list**, and **read** for projects (server-generated numeric `projectId`), with Angular routes for create, list, and details. Sprint 4 completes the project CRUD operations with **update**, **delete**, and **search** for projects.
 
 The Angular client talks to an Express API that persists to the existing MongoDB Atlas `task_management_system` database (`tasks` and `projects` collections).
 
@@ -52,10 +52,11 @@ The app shell (`AppComponent`) includes a primary nav:
 - **Search Tasks** → `/tasks/search`
 - **Projects** → `/projects`
 - **Create Project** → `/projects/create`
+- **Search Projects** → `/projects/search` (Sprint 4)
 
 From the task list, tasks with a numeric `taskId` link to `/tasks/:taskId`. Details pages include **Back to tasks**, **Edit Task** (`/tasks/:taskId/edit`), and **Delete Task** (`/tasks/:taskId/delete`) when `taskId` is present. After a successful create, the app navigates to that task’s details page (`/tasks/:taskId`) and shows the assigned Task ID. After a successful delete, the app navigates to the task list. After a successful update, the app returns to that task’s details page.
 
-From the project list, each project links to `/projects/:projectId`. After a successful project create, the app navigates to `/projects/:projectId` and shows the assigned Project ID. Project details include **Back to projects**.
+From the project list, each project links to `/projects/:projectId`. After a successful project create, the app navigates to `/projects/:projectId` and shows the assigned Project ID. Project details include **Back to projects**, **Edit Project** (`/projects/:projectId/edit`), and **Delete Project** (`/projects/:projectId/delete`) (Sprint 4). After a successful project update, the app returns to that project's details page. After a successful project delete, the app navigates to the project list.
 
 ## Angular components
 
@@ -107,14 +108,29 @@ Root shell. Renders the brand, primary navigation, and `<router-outlet>` for fea
 ### `ProjectDetailsComponent` (`client/src/app/project-details/`) — Sprint 3
 
 - **Route:** `/projects/:projectId`
-- **How it works:** Reads `projectId` from the route, calls `ProjectService.getProjectById()` → `GET /api/projects/:projectId`, and displays name, description, dates, and Project ID. Missing projects show **Project not found.** Includes **Back to projects**. Direct navigation and browser refresh work for this route.
+- **How it works:** Reads `projectId` from the route, calls `ProjectService.getProjectById()` → `GET /api/projects/:projectId`, and displays name, description, dates, and Project ID. Missing projects show **Project not found.** Includes **Back to projects**, **Edit Project**, and **Delete Project** (Sprint 4). Direct navigation and browser refresh work for this route.
+
+### `ProjectUpdateComponent` (`client/src/app/project-update/`) — Sprint 4
+
+- **Route:** `/projects/:projectId/edit`
+- **How it works:** Loads the existing project, populates a reactive form with editable fields (name, description, start date, end date). Submits via `ProjectService.updateProject()` → `PUT /api/projects/:projectId`. Does not change `_id`, `projectId`, or `dateCreated`. On success, navigates back to `/projects/:projectId`.
+
+### `ProjectDeleteComponent` (`client/src/app/project-delete/`) — Sprint 4
+
+- **Route:** `/projects/:projectId/delete`
+- **How it works:** Confirmation page with **Yes, Delete Project** and **Cancel**. Confirm calls `ProjectService.deleteProject()` → `DELETE /api/projects/:projectId` and navigates to `/projects`. Cancel returns to `/projects/:projectId` without deleting.
+
+### `ProjectSearchComponent` (`client/src/app/project-search/`) — Sprint 4
+
+- **Route:** `/projects/search`
+- **How it works:** Search form calls `ProjectService.searchProjects(query)` → `GET /api/projects/search?query=…`. Matches name, description, and (when numeric) `projectId`. Empty query returns no results. Includes a link back to the project list.
 
 ### Shared client pieces
 
 - **`TaskService`** — HTTP wrapper for list, get-by-id, create, update, delete, and search.
-- **`ProjectService`** — HTTP wrapper for list, get-by-id, and create (Sprint 3).
+- **`ProjectService`** — HTTP wrapper for list, get-by-id, create, update, delete, and search (Sprint 4 adds update, delete, and search).
 - **`models/task.ts`** — TypeScript types and status/priority enums aligned with the API/Atlas schema (`CreateTaskRequest` / `UpdateTaskRequest` omit client-supplied `taskId`).
-- **`models/project.ts`** — Project types aligned with the Atlas `projects` collection (`CreateProjectRequest` omits client-supplied `projectId`).
+- **`models/project.ts`** — Project types aligned with the Atlas `projects` collection (`CreateProjectRequest` / `UpdateProjectRequest` omit client-supplied `projectId`).
 - **`environment.ts`** — `apiBaseUrl` (default `http://localhost:3000`).
 
 ## API endpoints
@@ -129,8 +145,11 @@ Root shell. Renders the brand, primary navigation, and `<router-outlet>` for fea
 | `PUT` | `/api/tasks/:taskId` | Update a task (Sprint 2) |
 | `DELETE` | `/api/tasks/:taskId` | Delete a task (Sprint 2) |
 | `GET` | `/api/projects` | List all projects (Sprint 3) |
+| `GET` | `/api/projects/search?query=` | Search projects (Sprint 4) |
 | `POST` | `/api/projects` | Create a project (server assigns `projectId`) (Sprint 3) |
 | `GET` | `/api/projects/:projectId` | Read one project by numeric `projectId` (Sprint 3) |
+| `PUT` | `/api/projects/:projectId` | Update a project (Sprint 4) |
+| `DELETE` | `/api/projects/:projectId` | Delete a project (Sprint 4) |
 
 ### Task fields
 
@@ -157,6 +176,12 @@ Server layout: `routes/project.js` → `controllers/project.js` → `services/pr
 - **List projects:** Returns `200` with `{ message, projects }`.
 - **Read project:** Returns `200` with `{ message, project }` where `project` may be `null` when not found; invalid `:projectId` returns `400`. Route order mounts `GET /` and `POST /` before `GET /:projectId`.
 
+### Sprint 4 API notes
+
+- **Update project:** Validates editable fields; returns `400` / `404` / `409` as appropriate; refreshes `dateModified` only; does not change `_id`, `projectId`, or `dateCreated`.
+- **Delete project:** Returns `200` on success, `404` when missing, `400` for non-numeric `:projectId`.
+- **Search projects:** Registered as `GET /search` **before** `GET /:projectId` so `"search"` is not treated as an ID. Matches name, description, and (when numeric) `projectId`; empty query returns no results.
+
 ## Sprint 2 summary
 
 | Contributor area | Feature | Client | API |
@@ -174,6 +199,16 @@ Server layout: `routes/project.js` → `controllers/project.js` → `services/pr
 | Student C (Daniella) | List all projects | `/projects` | `GET /api/projects` |
 
 Integrated on `dev` with create → list → details navigation, Projects nav links, and create-to-details `projectId` / `taskId` flows.
+
+## Sprint 4 summary
+
+| Contributor area | Feature | Client | API |
+| --- | --- | --- | --- |
+| Student A (Will) | Update project | `/projects/:projectId/edit` | `PUT /api/projects/:projectId` |
+| Student B (Dustin) | Delete project | `/projects/:projectId/delete` | `DELETE /api/projects/:projectId` |
+| Student C (Daniella) | Search projects | `/projects/search` | `GET /api/projects/search?query=` |
+
+Integrated on `dev` with full CRUD operations for projects. Project details now include edit and delete links, and the primary nav includes Search Projects.
 
 ## Project structure (high level)
 
@@ -194,6 +229,9 @@ client/src/app/
   project-create/          # Sprint 3
   project-list/            # Sprint 3
   project-details/         # Sprint 3
+  project-update/          # Sprint 4
+  project-delete/          # Sprint 4
+  project-search/          # Sprint 4
 server/
   app.js / server.js
   config/db.js
